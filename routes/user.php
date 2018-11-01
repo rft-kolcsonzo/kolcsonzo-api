@@ -6,12 +6,12 @@ $app->group('/users', function (){
         $session = $request->getAttribute('session');
 
         $users = $this->userModel->getAll();
-        //ide jön ha valami szempont szerint keresünk
+        //ide jon ha valami szempont szerint keresunk
 
         return $response->withJson($users);
     });
 
-    // GET /products/{productId}
+    // GET /users/{userId}
     $this->get('/{userId}', function ($request, $response, $args) {
         $userId = $args['userId'];
 
@@ -21,7 +21,7 @@ $app->group('/users', function (){
 
         if ($order = $this->userModel->get($userId)) {
 
-            //ide jön ha valami szempont szerint keresünk
+            //ide jon ha valami szempont szerint keresunk
             
             return $response->withJson($user);
         }

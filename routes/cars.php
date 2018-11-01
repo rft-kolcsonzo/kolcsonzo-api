@@ -6,7 +6,7 @@ $app->group('/cars', function (){
         $session = $request->getAttribute('session');
 
         $cars = $this->carModel->getAll();
-        //ide jön ha valami szempont szerint keresünk
+        //ide jon ha valami szempont szerint keresunk
 
         return $response->withJson($cars);
     });
@@ -21,7 +21,7 @@ $app->group('/cars', function (){
 
         if ($car = $this->carModel->get($carId)) {
 
-            //ide jön ha valami szempont szerint keresünk
+            //ide jon ha valami szempont szerint keresunk
             
             return $response->withJson($car);
         }

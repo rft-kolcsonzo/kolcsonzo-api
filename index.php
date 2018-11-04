@@ -43,6 +43,11 @@ $container['sessionModel'] = function ($container) {
     return new SessionModel($container);
 };
 
+$container['User'] = function ($container) {
+    require_once 'lib/User.php';
+
+    return new User($container);
+};
 
 require_once 'middlewares/session.php';
 

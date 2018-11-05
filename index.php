@@ -28,7 +28,7 @@ $container['carModel'] = function ($container) {
 $container['carServiceModel'] = function ($container) {
     require_once 'models/CarServiceModel.php';
 
-    return new CarModel($container);
+    return new CarServiceModel($container);
 };
 
 $container['userModel'] = function ($container) {

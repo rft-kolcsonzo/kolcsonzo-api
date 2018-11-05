@@ -3,7 +3,7 @@
 class OrderModel extends Model
 {
     
-    public function get($order_id)
+    public function getOrder($order_id)
     {
         return $this->db
             ->select([
@@ -15,7 +15,7 @@ class OrderModel extends Model
             ->fetch();
     }
 
-    public function getAll()
+    public function getAllOrder()
     {
         return $this->db
             ->select([
@@ -25,5 +25,28 @@ class OrderModel extends Model
             ->execute()
             ->fetchAll();
     }
+    
+    public function insertOrder($datas)
+    {       
+        return $this->db->insert($datas)
+                        ->into('rent_orders')
+                        ->execute();
+    }
+
+    public function deleteOrder($id)
+    {
+        return $this->db->delete()
+                        ->from('rent_orders')
+                        ->where('rent_id', '=', $id)
+                        ->execute();
+    }
+
+    public function updateOrder($id, $datas)
+    {
+        return $this->db->update($datas)
+                        ->table('rent_orders')
+                        ->where('rent_id', '=', $id)
+                        ->execute();
+    }    
 
 }

@@ -25,6 +25,12 @@ $container['carModel'] = function ($container) {
     return new CarModel($container);
 };
 
+$container['carServiceModel'] = function ($container) {
+    require_once 'models/CarServiceModel.php';
+
+    return new CarModel($container);
+};
+
 $container['userModel'] = function ($container) {
     require_once 'models/UserModel.php';
 
@@ -49,15 +55,6 @@ $container['User'] = function ($container) {
     return new User($container);
 };
 
-$container['Car'] = function ($container) {
-    require_once 'lib/CarService.php';
-    return new CarService($container);
-};
-
-$container['Car'] = function ($container) {
-    require_once 'lib/Car.php';
-    return new Car($container);
-};
 
 require_once 'middlewares/session.php';
 

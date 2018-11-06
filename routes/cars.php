@@ -6,8 +6,8 @@ $app->group('/cars', function (){
 
         $session = $request->getAttribute('session');	    
 
-        $car = $this->carModel->getAll();	      
-        
+        $car = $this->carModel->getAllCars();	      
+    
         return $response->withJson($car);	     
     });	    
 	    
@@ -24,12 +24,13 @@ $app->group('/cars', function (){
          
             return $response->withJson($car);	          
         }	        
+
         return $response->withJson([ 'message' => 'Nem létezik ilyen autó!' ], 404);	       
     });	  
     // get by filter, soon
-    $this->get('/{carId}', function ($request, $response, $args) {	 
+    $this->get('/{carId}/', function ($request, $response, $args) {	 
 
-        $filter;
+        $field = args['field'];
         $keyword;	 
 
         if (!$session = $request->getAttribute('session')) {	
@@ -37,10 +38,11 @@ $app->group('/cars', function (){
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
         }	        
 
-        if ($car = $this->carModel->getByFilter($filter, $keyword)) {	       
+        if ($car = $this->carModel->getByFilter($field, $keyword)) {	       
          
             return $response->withJson($car);	          
-        }	        
+        }	
+
         return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti autó!' ], 404);	       
     });	
     
@@ -54,7 +56,7 @@ $app->group('/cars', function (){
 
     $this->delete('/[{carId}]', function ($request, $response, $args) {
 
-        $id = $args['carID'];
+        $id = $args['carId'];
 
          if ($this->carModel->deleteCar($id)) {
             return $this->response->withJson(['message' => 'Sikeres törlés']);

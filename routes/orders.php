@@ -5,7 +5,7 @@ $app->group('/orders', function (){
     $this->get('', function ($request, $response) {
         $session = $request->getAttribute('session');
         
-        $orders = $this->orderModel->getAll();
+        $orders = $this->orderModel->getAllOrder();
         
         return $response->withJson($orders);
     });

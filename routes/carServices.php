@@ -8,7 +8,7 @@ $app->group('/carServices', function (){
 
         $carService = $this->carServiceModel->getAllCarServices();	      
         
-        return $response->withJson($car);	     
+        return $response->withJson($carService);	     
     });	    
     
     $this->get('/{carServiceId}', function ($request, $response, $args) {	 
@@ -23,13 +23,14 @@ $app->group('/carServices', function (){
         if ($carService = $this->carServiceModel->geCarServiceById($carServiceId)) {	       
          
             return $response->withJson($carService);	          
-        }	        
+        }
+
         return $response->withJson([ 'message' => 'Nem létezik ilyen szervíz információ!' ], 404);	       
     });	   
     //filter soon
-    $this->get('/{carServiceId}', function ($request, $response, $args) {	 
+    $this->get('/filter', function ($request, $response, $args) {	 
 	 
-        $filter;
+        $field;
         $keyword;
 
         if (!$session = $request->getAttribute('session')) {	
@@ -37,7 +38,7 @@ $app->group('/carServices', function (){
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
         }	        
 
-        if ($carService = $this->carServiceModel->getByFilter($filter, $keyword)) {	       
+        if ($carService = $this->carServiceModel->getByFilter($field, $keyword)) {	       
          
             return $response->withJson($carService);	          
         }	        
@@ -67,7 +68,7 @@ $app->group('/carServices', function (){
 
         $datas = $request->getParsedBody();
         $id = $args['carServiceId'];
-        $response = $this->orderModel->updateCarService($id, $datas);
+        $response = $this->carServiceModel->updateCarService($id, $datas);
 
         return $this->response->withJson(['message' => $response]);
     });

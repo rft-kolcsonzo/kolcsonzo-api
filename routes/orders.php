@@ -54,5 +54,17 @@ $app->group('/orders', function (){
         return $this->response->withJson(['message' => $response]);
     });
     
+    $this->get('/filter/{orderId}/', function ($request, $response, $args) {
+        $field = args['field'];
+        $keyword;
+        if (!$session = $request->getAttribute('session')) {
+            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
+        }
+        if ($order = $this->orderModel->getByFilter($field, $keyword)) {
+            return $response->withJson($order);
+        }
+        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti autó!' ], 404);
+    });
+
     
 })->add($SessionMiddleware); // Use SessionMiddleware

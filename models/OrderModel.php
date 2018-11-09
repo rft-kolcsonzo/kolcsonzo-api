@@ -3,7 +3,7 @@
 class OrderModel extends Model
 {
     
-    public function getOrder($order_id)
+    public function getOrderById($order_id)
     {
         return $this->db
             ->select([
@@ -48,5 +48,14 @@ class OrderModel extends Model
                         ->where('rent_id', '=', $id)
                         ->execute();
     }    
+
+    public function getByFilter($field, $keyword)
+    {
+        return $this->db->select()
+                        ->from('orders')
+                        ->where($field, 'like', '%'.$keyword.'%')
+                        ->execute()
+                        ->fetch();
+    }
 
 }

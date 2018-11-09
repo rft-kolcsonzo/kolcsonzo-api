@@ -2,12 +2,26 @@
 
 $app->group('/orders', function (){
     // GET /orders
+
     $this->get('', function ($request, $response) {
         $session = $request->getAttribute('session');
         
         $orders = $this->orderModel->getAllOrder();
         
         return $response->withJson($orders);
+    });
+
+    //GET /orders/filter
+    $this->get('/filter', function ($request, $response) {
+        $field = $request->getQueryParam('field');
+        $keyword = $request->getQueryParam('keyword');
+
+        if (!$session = $request->getAttribute('session')) {
+            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
+        }
+
+        $response = $this->orderModel->getByFilter($field, $keyword);
+        return $this->response->withJson(['message' => $response]);
     });
 
     // GET /orders/{orderId}
@@ -28,9 +42,9 @@ $app->group('/orders', function (){
     
     $this->post('/insert', function ($request, $response) {
         
-        /*if (!$session = $request->getAttribute('session')) {
+        if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
-        }*/
+        }
 
         $datas = $request->getParsedBody();
         $response = $this->orderModel->insertOrder($datas);
@@ -54,17 +68,6 @@ $app->group('/orders', function (){
         return $this->response->withJson(['message' => $response]);
     });
     
-    $this->get('/filter/{orderId}/', function ($request, $response, $args) {
-        $field = args['field'];
-        $keyword;
-        if (!$session = $request->getAttribute('session')) {
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
-        }
-        if ($order = $this->orderModel->getByFilter($field, $keyword)) {
-            return $response->withJson($order);
-        }
-        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti autó!' ], 404);
-    });
 
     
 })->add($SessionMiddleware); // Use SessionMiddleware

@@ -52,7 +52,7 @@ class OrderModel extends Model
     public function getByFilter($field, $keyword)
     {
         return $this->db->select()
-                        ->from('orders')
+                        ->from('rent_orders')
                         ->where($field, 'like', '%'.$keyword.'%')
                         ->execute()
                         ->fetch();

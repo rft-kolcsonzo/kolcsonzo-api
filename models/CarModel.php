@@ -43,7 +43,7 @@ class CarModel extends Model
                         ->where('c.car_id', '=', $id)
                         ->execute();
     }
-    //soon
+    
     public function getByFilter($field, $keyword)
     {
         return $this->db->select()

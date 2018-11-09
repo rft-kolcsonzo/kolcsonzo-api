@@ -10,6 +10,23 @@ $app->group('/carServices', function (){
         
         return $response->withJson($carService);	     
     });	    
+
+    $this->get('/filter', function ($request, $response) {	 
+
+        $field = $request->getQueryParam('field');
+        $keyword = $request->getQueryParam('keyword');
+
+        if (!$session = $request->getAttribute('session')) {	
+
+            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
+        }	        
+
+        if ($carService = $this->carServiceModel->getByFilter($field, $keyword)) {	       
+         
+            return $response->withJson($carService);	          
+        }	        
+        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti szervíz információ!' ], 404);	       
+    });	
     
     $this->get('/{carServiceId}', function ($request, $response, $args) {	 
 
@@ -27,23 +44,6 @@ $app->group('/carServices', function (){
 
         return $response->withJson([ 'message' => 'Nem létezik ilyen szervíz információ!' ], 404);	       
     });	   
-    //filter soon
-    $this->get('/filter', function ($request, $response, $args) {	 
-	 
-        $field;
-        $keyword;
-
-        if (!$session = $request->getAttribute('session')) {	
-
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
-        }	        
-
-        if ($carService = $this->carServiceModel->getByFilter($field, $keyword)) {	       
-         
-            return $response->withJson($carService);	          
-        }	        
-        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti szervíz információ!' ], 404);	       
-    });	
     
     $this->post('/insert', function ($request, $response) {
         

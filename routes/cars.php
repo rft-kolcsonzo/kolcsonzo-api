@@ -1,6 +1,6 @@
 <?php
 
-$app->group('/cars', function (){
+$app-> group('/cars', function (){
 
     $this->get('', function ($request, $response) {
 
@@ -9,9 +9,27 @@ $app->group('/cars', function (){
         $car = $this->carModel->getAllCars();	      
     
         return $response->withJson($car);	     
-    });	    
+    });	   
+    
+    $this->get('/filter', function ($request, $response) {	 
+
+        $field = $request->getQueryParam('field');
+        $keyword = $request->getQueryParam('keyword');
+
+        if (!$session = $request->getAttribute('session')) {	
+
+            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
+        }	     
+
+        if ($car = $this->carModel->getByFilter($field, $keyword)) {	       
+         
+            return $response->withJson($car);	          
+        }	
+
+        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti autó!' ], 404);	       
+    });	
 	    
-    $this->get('/{carId}', function ($request, $response, $args) {	 
+    $this->get('/[{carId}]', function ($request, $response, $args) {	 
 
         $carId = $args['carId'];	 
 
@@ -27,24 +45,6 @@ $app->group('/cars', function (){
 
         return $response->withJson([ 'message' => 'Nem létezik ilyen autó!' ], 404);	       
     });	  
-    // get by filter, soon
-    $this->get('/{carId}/', function ($request, $response, $args) {	 
-
-        $field = args['field'];
-        $keyword;	 
-
-        if (!$session = $request->getAttribute('session')) {	
-
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
-        }	        
-
-        if ($car = $this->carModel->getByFilter($field, $keyword)) {	       
-         
-            return $response->withJson($car);	          
-        }	
-
-        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti autó!' ], 404);	       
-    });	
     
     $this->post('/insert', function ($request, $response) {
         
@@ -58,7 +58,7 @@ $app->group('/cars', function (){
 
         $id = $args['carId'];
 
-         if ($this->carModel->deleteCar($id)) {
+        if ($this->carModel->deleteCar($id)) {
             return $this->response->withJson(['message' => 'Sikeres törlés']);
         }
 

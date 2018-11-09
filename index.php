@@ -31,6 +31,12 @@ $container['carServiceModel'] = function ($container) {
     return new CarServiceModel($container);
 };
 
+$container['carImagesModel'] = function ($container) {
+    require_once 'models/CarImagesModel.php';
+
+    return new CarImagesModel($container);
+};
+
 $container['userModel'] = function ($container) {
     require_once 'models/UserModel.php';
 

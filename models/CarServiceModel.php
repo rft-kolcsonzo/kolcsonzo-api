@@ -48,7 +48,7 @@ class CarServiceModel extends Model
                         ->execute()
                         ->fetch();
     }
-    //soon
+    
     public function getByFilter($field, $keyword)
     {
         return $this->db->select()

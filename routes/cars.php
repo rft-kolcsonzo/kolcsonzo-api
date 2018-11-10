@@ -29,7 +29,7 @@ $app-> group('/cars', function (){
         return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti autó!' ], 404);	       
     });	
 	    
-    $this->get('/[{carId}]', function ($request, $response, $args) {	 
+    $this->get('/{carId}', function ($request, $response, $args) {	 
 
         $carId = $args['carId'];	 
 
@@ -69,7 +69,7 @@ $app-> group('/cars', function (){
 
         $datas = $request->getParsedBody();
         $id = $args['carId'];
-        $response = $this->orderModel->updateCar($id, $datas);
+        $response = $this->carModel->updateCar($id, $datas);
 
         return $this->response->withJson(['message' => $response]);
     });

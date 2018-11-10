@@ -25,16 +25,16 @@ $container['carModel'] = function ($container) {
     return new CarModel($container);
 };
 
-$container['carServiceModel'] = function ($container) {
-    require_once 'models/CarServiceModel.php';
+$container['serviceModel'] = function ($container) {
+    require_once 'models/ServiceModel.php';
 
-    return new CarServiceModel($container);
+    return new ServiceModel($container);
 };
 
-$container['carImagesModel'] = function ($container) {
-    require_once 'models/CarImagesModel.php';
+$container['imageModel'] = function ($container) {
+    require_once 'models/ImageModel.php';
 
-    return new CarImagesModel($container);
+    return new ImageModel($container);
 };
 
 $container['userModel'] = function ($container) {
@@ -67,6 +67,8 @@ require_once 'middlewares/session.php';
 $SessionMiddleware = new SessionMiddleware($container->sessionModel);
 
 require_once 'routes/cars.php';
+require_once 'routes/services.php';
+require_once 'routes/images.php';
 require_once 'routes/user.php';
 require_once 'routes/orders.php';
 

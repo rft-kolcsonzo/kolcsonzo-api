@@ -34,6 +34,13 @@ post->users/login
         "password": teszt
     }
 
+    válasz:
+    {
+        "type": "accesToken",
+        "token": "fghfjgdjdjkdjkdkdktud33k3k3ukd3k",
+        "created_time": "2018-11-25 11:11:20" 
+    }
+
 delete->users/userId
 
     user törlés

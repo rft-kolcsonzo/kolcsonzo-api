@@ -14,10 +14,6 @@ $app->group('/users', function (){
     $this->get('/[{userId}]', function ($request, $response, $args) {
         $userId = $args['userId'];
 
-        if (!$session = $request->getAttribute('session')) {
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
-        }
-
         if ($user = $this->userModel->getUserById($userId)) {
             
             return $response->withJson($user);
@@ -26,15 +22,35 @@ $app->group('/users', function (){
         return $response->withJson([ 'message' => 'Nem létezik ilyen felhasználó!' ], 404);
     });
 
-    $this->post('/insert', function ($request, $response) {
-        
-        /*if (!$session = $request->getAttribute('session')) {
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
-        }*/
+    $this->post('/', function ($request, $response) {
 
         $datas = $request->getParsedBody();
         $response = $this->User->insertUser($datas);
         return $this->response->withJson(['message' => $response]);
+    });
+
+    $this->post('/login', function ($request, $response, $args) {
+        $datas = ($_POST);
+        $input = $request->getParsedBody();
+
+        $answer = $this->User->login($datas);
+        
+        if ($answer) {
+
+            $insertId = $this->userModel->insertToken($answer);
+            
+            $insertedData = $this->userModel->getTokenData($insertId);
+
+            return $response->withJson([
+                'type'  => 'accessToken',
+                'token' => $insertedData['access_token'],
+                'created_time' => $insertedData['created_at']
+            ]);
+
+        } else {
+            return $response->withJson([ 'message' => 'Érvénytelen belépési adatok!' ], 404 );
+        }
+
     });
 
     $this->delete('/[{userId}]', function ($request, $response, $args) {

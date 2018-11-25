@@ -42,4 +42,31 @@ class UserModel extends Model
                         ->where('user_id', '=', $id)
                         ->execute();
     }
+
+    public function login($email, $password)
+    {
+        return $this->db->select()
+                        ->from('users u')
+                        ->where('u.email', '=', $email)
+                        ->where('u.password', '=', $password)
+                        ->execute()
+                        ->fetch();
+    }
+
+    public function insertToken($datas)
+    {       
+        return $this->db->insert($datas)
+                        ->into('sessions')
+                        ->execute();
+    }
+
+    public function getTokenData($id)
+    {
+        return $this->db->select()
+                        ->from('sessions s')
+                        ->where('s.session_id', '=', $id)
+                        ->execute()
+                        ->fetch();
+    }
+
 }

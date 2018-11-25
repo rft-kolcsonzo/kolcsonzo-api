@@ -36,7 +36,7 @@ class User
                 }
             
 
-            $datas['password'] = md5($datas['password']);
+            $datas['password'] = sha1($datas['password']);
 
             if ($this->model->insertUser($datas)) {
                 return $message;
@@ -45,6 +45,22 @@ class User
         } catch (Exception $e) {
            return $e->getMessage();
         }
+    }
+
+    public function login($datas)
+    {
+        $email = $datas['user_email'];
+        $password = sha1($datas['password']);
+
+        if (($user = $this->model->login($email, $password))) {
+            return array(
+                'access_token' => bin2hex(random_bytes(30)),
+                'user_id' => $user['user_id']
+            );     
+        } else {
+            return false;
+        }
+
     }
 
     public function updateUser($id, $datas)
@@ -63,7 +79,7 @@ class User
                 if (isset($datas['password']) && !$datas['password']) {
                     throw new Exception('A jelszó mező kötelező');
                 } else if (isset($datas['password']) && $datas['password']) {
-                    $datas['password'] = md5($datas['password']);
+                    $datas['password'] = sha1($datas['password']);
                 }
 
                 if (isset($datas['firstname']) && !$datas['firstname']) {

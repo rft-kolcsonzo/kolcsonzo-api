@@ -23,6 +23,10 @@ class User
                     throw new Exception('Az email mező kötelező');
                 }
 
+                if (!filter_var($datas['email'], FILTER_VALIDATE_EMAIL)) {
+                    throw new Exception('Az email cím formátuma nem megfelelő');
+                }
+
                 if (!isset($datas['password']) || !$datas['password']) {
                     throw new Exception('A jelszó mező kötelező');
                 }
@@ -74,6 +78,10 @@ class User
 
                 if (isset($datas['email']) && !$datas['email']) {
                     throw new Exception('Az email mező kötelező');
+                }
+
+                if (isset($datas['email']) && $datas['email'] && !filter_var($datas['email'], FILTER_VALIDATE_EMAIL)) {
+                    throw new Exception('Az email cím formátuma nem megfelelő');
                 }
 
                 if (isset($datas['password']) && !$datas['password']) {

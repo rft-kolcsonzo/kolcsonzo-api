@@ -3,6 +3,15 @@
 get->services
 
 	Visszadja az összes szerviz infot.
+	Pl:
+	{
+		"service_id": 2,	
+		"car_id": 3,	
+		"service_date": "2018-12-03",	
+		"runned_km": 200,	
+		"need_to_fix": 0,	
+		"ready_to_work": 0
+	}
 
 get->services/filter
 	
@@ -26,13 +35,4 @@ put->services/serviceId
 
 	Egy serviceId alapján frissíti az adatokat az adott szerviz infon.
 
-Pl:
-{
-	"service_id": 2,	
-	"car_id": 3,	
-	"service_date": "2018-12-03",	
-	"runned_km": 200,	
-	"need_to_fix": 0,	
-	"ready_to_work": 0
-}
 

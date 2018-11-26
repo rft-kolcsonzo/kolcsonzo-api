@@ -3,6 +3,15 @@
 get->images
 
 	Visszadja az összes kocsi kép infot.
+	
+	Pl:
+	{
+		"file_id": 5,
+		"car_id": 3,
+		"filename": "Király lada.jpg",
+		"pathdir": "pics",
+		"pathur": "file:///c://this/is/a/path/to/pics"
+	}
 
 get->images/filter
 	
@@ -26,12 +35,4 @@ put->images/imageId
 
 	Egy imageId alapján frissíti az adatokat az adott kocsi kép infon.
 
-Pl:
-{
-	"file_id": 5,
-	"car_id": 3,
-	"filename": "Király lada.jpg",
-	"pathdir": "pics",
-	"pathur": "file:///c://this/is/a/path/to/pics"
-}
 

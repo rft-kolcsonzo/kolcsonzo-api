@@ -63,8 +63,10 @@ $container['User'] = function ($container) {
 
 
 require_once 'middlewares/session.php';
+require_once 'middlewares/auth.php';
 
 $SessionMiddleware = new SessionMiddleware($container->sessionModel);
+$AuthenticationMiddleware = new AuthenticationMiddleware($container->sessionModel);
 
 require_once 'routes/cars.php';
 require_once 'routes/services.php';

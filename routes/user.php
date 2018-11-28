@@ -26,14 +26,38 @@ $app->group('/users', function (){
 
         $datas = $request->getParsedBody();
         $response = $this->User->insertUser($datas);
-        return $this->response->withJson(['message' => $response]);
+
+        $message = $this->userModel->getUserById($response);
+        
+        return $this->response->withJson(['message' => $message ? $message : $response]);
     });
 
+    $this->delete('/[{userId}]', function ($request, $response, $args) {
+        $id = $args['userId'];
+
+        if ($this->userModel->deleteUser($id)) {
+            return $this->response->withJson(['message' => 'Sikeres törlés']);
+        }
+
+        return $this->response->withJson(['message' => 'Hiba történt']);
+    });
+
+    $this->put('/[{id}]', function ($request, $response, $args) {
+        $datas = $request->getParsedBody();
+        $id = $args['id'];
+        $response = $this->User->updateUser($id, $datas);
+        $message = $this->userModel->getUserById($response);
+        return $this->response->withJson(['message' => $message ? $message : $response]);
+    });
+
+})->add($SessionMiddleware); // Use SessionMiddleware
+
+$app->group('/auth', function (){
     $this->post('/login', function ($request, $response, $args) {
-        $datas = ($_POST);
+        
         $input = $request->getParsedBody();
 
-        $answer = $this->User->login($datas);
+        $answer = $this->User->login($input);
         
         if ($answer) {
 
@@ -52,22 +76,4 @@ $app->group('/users', function (){
         }
 
     });
-
-    $this->delete('/[{userId}]', function ($request, $response, $args) {
-        $id = $args['userId'];
-
-        if ($this->userModel->deleteUser($id)) {
-            return $this->response->withJson(['message' => 'Sikeres törlés']);
-        }
-
-        return $this->response->withJson(['message' => 'Hiba történt']);
-    });
-
-    $this->put('/[{id}]', function ($request, $response, $args) {
-        $datas = $request->getParsedBody();
-        $id = $args['id'];
-        $response = $this->User->updateUser($id, $datas);
-        return $this->response->withJson(['message' => $response]);
-    });
-
-})->add($SessionMiddleware); // Use SessionMiddleware
+});

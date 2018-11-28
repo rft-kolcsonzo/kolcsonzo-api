@@ -13,7 +13,6 @@ class User
 
     public function insertUser($datas)
     {
-        $message = 'Sikeres mentés';
         try {
                 if (!$datas) {
                     throw new Exception('Nincs adat');
@@ -38,13 +37,16 @@ class User
                 if (!isset($datas['lastname']) || !$datas['lastname']) {
                     throw new Exception('Az utónév mező kötelező');
                 }
+
+                if ($this->model->getUser('email', $datas['email'])) {
+                    throw new Exception('Ez az email cím már foglalt');
+                }
             
 
             $datas['password'] = sha1($datas['password']);
 
-            if ($this->model->insertUser($datas)) {
-                return $message;
-            }
+            return $this->model->insertUser($datas);
+                
             
         } catch (Exception $e) {
            return $e->getMessage();
@@ -69,7 +71,6 @@ class User
 
     public function updateUser($id, $datas)
     {
-        $message = 'Sikeres módosítás';
 
         try {
                 if (!$datas) {
@@ -98,11 +99,8 @@ class User
                     throw new Exception('Az utónév mező kötelező');
                 }
 
-                if ($this->model->updateUser($id, $datas)) {
-                    return $message;
-                } else {
-                    return 'Ez az adat már szerepel az adatbázisban';
-                }
+                return $this->model->updateUser($id, $datas);
+                  
             
         } catch (Exception $e) {
            return $e->getMessage();

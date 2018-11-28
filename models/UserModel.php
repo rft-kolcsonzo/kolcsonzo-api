@@ -20,6 +20,15 @@ class UserModel extends Model
                         ->fetch();
     }
 
+    public function getUser($field, $data)
+    {
+        return $this->db->select()
+                        ->from('users u')
+                        ->where('u.'.$field, '=', $data)
+                        ->execute()
+                        ->fetch();
+    }
+
     public function insertUser($datas)
     {       
         return $this->db->insert($datas)
@@ -37,10 +46,12 @@ class UserModel extends Model
 
     public function updateUser($id, $datas)
     {
-        return $this->db->update($datas)
+        $this->db->update($datas)
                         ->table('users')
                         ->where('user_id', '=', $id)
                         ->execute();
+        return $id;
+                        
     }
 
     public function login($email, $password)

@@ -1,7 +1,7 @@
 # CarRental REST API
 [![CircleCI](https://circleci.com/gh/rft-kolcsonzo/kolcsonzo-api.svg?style=shield)](https://circleci.com/gh/rft-kolcsonzo/kolcsonzo-api)
+[![Latest pre-release](https://img.shields.io/github/tag/rft-kolcsonzo/kolcsonzo-api.svg)](https://github.com/rft-kolcsonzo/kolcsonzo-api)
 [![Docker image size](https://img.shields.io/microbadger/image-size/clearcodesolutions/kolcsonzo-api.svg)](https://hub.docker.com/r/clearcodesolutions/kolcsonzo-api/)
-[![](https://images.microbadger.com/badges/version/clearcodesolutions/kolcsonzo-api.svg)](https://hub.docker.com/r/clearcodesolutions/kolcsonzo-api/)
 
 REST API of a simple car rental software made for a university project. 
 

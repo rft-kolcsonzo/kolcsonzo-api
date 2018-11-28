@@ -1,40 +1,88 @@
 # Images endpoint
 
-> **!!TODO!!** Oldal újra formázása a users.md-hez hasonlóan.
+[vissza](index.md)
 
-get->images
-
-	Visszadja az �sszes kocsi k�p infot.
+## **GET** /images
+Visszadja az összes kocsi kép infot.
 	
-	Pl:
-	{
-		"file_id": 5,
-		"car_id": 3,
-		"filename": "Kir�ly lada.jpg",
-		"pathdir": "pics",
-		"pathur": "file:///c://this/is/a/path/to/pics"
-	}
+```json
+{
+	"file_id": 5,
+	"car_id": 3,
+	"filename": "Király_lada.jpg",		
+	"pathdir": "pics",
+	"pathur": "file:///c://this/is/a/path/to/pics"
+}
+```
 
-get->images/filter
-	
-	Egy 'field' �s egy 'keyword' param�tert v�r.
-	field: melyik mez� alapj�n akarsz lek�rdezni,
-	keyword: milyen �rt�kkel.
+## **GET** /images/filter
+Egy **field** és egy **keyword** paramétert vár.
+* *field*: 
+	* melyik mező alapján akarsz lekérdezni,
+* *keyword*: 
+	* milyen értékkel.
 
-get->images/imageId
+### Request
+```json
+{
+	"filename": "Király_lada.jpg"
+}
+```
+### Response
+```json
+{
+	"file_id": 5,
+	"car_id": 3,
+	"filename": "Király_lada.jpg",		
+	"pathdir": "pics",
+	"pathur": "file:///c://this/is/a/path/to/pics"
+}
+```
 
-	Egy imageId-t v�r �s visszaadja az adott kocsi k�p infot.
+## **GET** /images/:fileId
+Egy fileId-t vár és visszaadja az adott kocsi kép infot.
 
-post->images/insert
+### Request
+```json
+{
+	"fileId": 3
+}
+```
+### Response
+```json
+{
+	"file_id": 5,
+	"car_id": 3,
+	"filename": "Király_lada.jpg",		
+	"pathdir": "pics",
+	"pathur": "file:///c://this/is/a/path/to/pics"
+}
+```
 
-	Egy kocsi k�p info besz�r�sa.
+## **POST** /images/insert
+Egy kocsi kép info beszúrása.
 
-delete->images/imageId
+## **DELETE** /images/:fileId
+Egy fileId alapján törli az adott kocsi kép infot.
 
-	Egy imageId alapj�n t�rli az adott kocsi k�p infot.
+## **PUT** /images/:fileId
+Egy fileId alapján frissíti az adatokat az adott kocsi kép infon.
 
-put->images/imageId
+### request
+```json
+{
+	"fileId": 5,
+	"filename": "Öreg_opel.jpg"
+}
 
-	Egy imageId alapj�n friss�ti az adatokat az adott kocsi k�p infon.
-
+### Response
+```json
+{
+	"file_id": 5,
+	"car_id": 3,
+	"filename": "Öreg_opel",		
+	"pathdir": "pics",
+	"pathur": "file:///c://this/is/a/path/to/pics"
+}
+```
 

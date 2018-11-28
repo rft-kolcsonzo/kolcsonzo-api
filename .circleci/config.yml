@@ -39,7 +39,7 @@ jobs:
         
       - run:
           name: "Build docker image"
-          command: docker build -t clearcodesolutions/kolcsonzo-api:$CIRCLE_SHA1 .
+          command: docker build --build-arg VCS_REF=`git rev-parse --short $CIRCLE_SHA1` -t clearcodesolutions/kolcsonzo-api:$CIRCLE_SHA1 .
       
       - deploy:
           name: "Push docker image(s) to Docker Hub"

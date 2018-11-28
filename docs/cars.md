@@ -92,12 +92,10 @@ Egy carId-t vár és visszaadja az adott kocsit.
 ```
 
 ## **POST** cars/insert
-
-	Egy kocsi beszúrása.
+Egy kocsi beszúrása.
 
 ## **DELETE** cars/:carId
-
-	Egy carId alapján törli az adott kocsit.
+Egy carId alapján törli az adott kocsit.
 
 ## **PUT** cars/:carId
 Egy carId alapján frissíti az adatokat az adott kocsin.

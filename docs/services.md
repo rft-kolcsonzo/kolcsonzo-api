@@ -1,40 +1,97 @@
 # Services endpoint
 
-> **!!TODO!!** Oldal újra formázása a users.md-hez hasonlóan.
+[vissza](index.md)
 
-get->services
-
-	Visszadja az összes szerviz infot.
-	Pl:
-	{
-		"service_id": 2,	
-		"car_id": 3,	
-		"service_date": "2018-12-03",	
-		"runned_km": 200,	
-		"need_to_fix": 0,	
-		"ready_to_work": 0
-	}
-
-get->services/filter
+## **GET** /services
+Visszadja az összes szerviz infot.
 	
-	Egy 'field' és egy 'keyword' paramétert vár.
-	field: melyik mező alapján akarsz lekérdezni,
-	keyword: milyen értékkel.
+### Response
+```json
+{
+	"service_id": 2,	
+	"car_id": 3,	
+	"service_date": "2018-12-03",	
+	"runned_km": 200,	
+	"need_to_fix": 0,	
+	"ready_to_work": 0
+}
+```
 
-get->services/serviceId
+## **GET** /services/filter
+Egy **field** és egy **keyword** paramétert vár.
+* *field*: 
+	* melyik mező alapján akarsz lekérdezni,
+* *keyword*: 
+	* milyen értékkel.
 
-	Egy serviceId-t vár és visszaadja az adott szerviz infot.
+### Request
+```json
+{
+	"runned_km": 400
+}
+```
+### Response
+```json
+{
+	"service_id": 2,	
+	"car_id": 3,	
+	"service_date": "2018-12-03",	
+	"runned_km": 400,	
+	"need_to_fix": 0,	
+	"ready_to_work": 0
+}
+```
 
-post->services/insert
+## **GET** /services/:serviceId
+Egy serviceId-t vár és visszaadja az adott szerviz infot.
 
-	Egy szerviz info beszúrása.
+### Request
+```json
+{
+	"serviceId": 1
+}
+```
 
-delete->services/serviceId
+### Response
+```json
+{
+	"service_id": 1,	
+	"car_id": 3,	
+	"service_date": "2018-12-03",	
+	"runned_km": 200,	
+	"need_to_fix": 0,	
+	"ready_to_work": 0
+}
+```
 
-	Egy serviceId alapján törli az adott szerviz infot.
+## **POST** /services/insert
+Egy szerviz info beszúrása.
 
-put->services/serviceId
+## **DELETE** /services/:serviceId
+Egy serviceId alapján törli az adott szerviz infot.
 
-	Egy serviceId alapján frissíti az adatokat az adott szerviz infon.
+## **PUT** /services/:serviceId
+Egy serviceId alapján frissíti az adatokat az adott szerviz infon.
+
+### Request
+```json
+{
+	"serviceId": 2,
+	"ready_to_work": 1
+}
+```
+
+### Response
+```json
+{
+	"service_id": 2,	
+	"car_id": 3,	
+	"service_date": "2018-12-03",	
+	"runned_km": 200,	
+	"need_to_fix": 0,	
+	"ready_to_work": 0
+}
+```
+
 
 

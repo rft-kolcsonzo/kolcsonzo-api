@@ -28,8 +28,10 @@ Visszadja az összes kocsit.
 
 ## **GET** /cars/filter
 Egy **field** és egy **keyword** paramétert vár.
-*field*: melyik mező alapján akarsz lekérdezni,
-*keyword*: milyen értékkel.
+* *field*: 
+	* melyik mező alapján akarsz lekérdezni,
+* *keyword*: 
+	* milyen értékkel.
 
 ### Request
 ```json

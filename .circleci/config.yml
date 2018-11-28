@@ -41,7 +41,7 @@ jobs:
           name: "Build docker image"
           command: docker build -t clearcodesolutions/kolcsonzo-api:$CIRCLE_SHA1 .
       
-      - run:
+      - deploy:
           name: "Push docker image(s) to Docker Hub"
           command: |
             case $CIRCLE_BRANCH in
@@ -60,4 +60,10 @@ jobs:
             then
               docker tag clearcodesolutions/kolcsonzo-api:$CIRCLE_SHA1 clearcodesolutions/kolcsonzo-api:$DOCKER_RELEASE_TAG
               docker push clearcodesolutions/kolcsonzo-api:$DOCKER_RELEASE_TAG
+            fi
+
+            if [ ! -z "$CIRCLE_TAG" ]
+            then
+              docker tag clearcodesolutions/kolcsonzo-api:$CIRCLE_SHA1 clearcodesolutions/kolcsonzo-api:$CIRCLE_TAG
+              docker push clearcodesolutions/kolcsonzo-api:$CIRCLE_TAG
             fi

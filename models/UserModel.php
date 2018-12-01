@@ -8,7 +8,7 @@ class UserModel extends Model
                         ->from('users u')
                         ->where('u.enabled_status', '=', 1)
                         ->execute()
-                        ->fetch();
+                        ->fetchAll();
     }
 
     public function getUserById($id)

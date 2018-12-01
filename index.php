@@ -72,6 +72,7 @@ require_once 'routes/cars.php';
 require_once 'routes/services.php';
 require_once 'routes/images.php';
 require_once 'routes/user.php';
+require_once 'routes/auth.php';
 require_once 'routes/orders.php';
 
 // Add middleware function: this function will be called with every request

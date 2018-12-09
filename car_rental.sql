@@ -32,6 +32,7 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `cars`;
 CREATE TABLE `cars` (
   `car_id` int(6) NOT NULL,
+  `plate_number` CHARACTER(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `modell` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `type` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `factory_id` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,

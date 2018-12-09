@@ -2,41 +2,24 @@
 
 $app-> group('/cars', function (){
 
-    $this->get('', function ($request, $response) {
-
-        $session = $request->getAttribute('session');	    
+    $this->get('', function ($request, $response) { 
 
         $car = $this->carModel->getAllCars();	      
     
         return $response->withJson($car);	     
     });	   
-    
-    $this->get('/filter', function ($request, $response) {	 
 
-        $field = $request->getQueryParam('field');
-        $keyword = $request->getQueryParam('keyword');
+    $this->post('', function ($request, $response) {
+        
+        $datas = $request->getParsedBody();
+        $response = $this->carModel->insertCar($datas);
 
-        if (!$session = $request->getAttribute('session')) {	
-
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
-        }	     
-
-        if ($car = $this->carModel->getByFilter($field, $keyword)) {	       
-         
-            return $response->withJson($car);	          
-        }	
-
-        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti autó!' ], 404);	       
-    });	
+        return $this->response->withJson(['message' => $response]);
+    });
 	    
-    $this->get('/{carId}', function ($request, $response, $args) {	 
+    $this->get('/[{carId}]', function ($request, $response, $args) {	 
 
-        $carId = $args['carId'];	 
-
-        if (!$session = $request->getAttribute('session')) {	
-
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
-        }	        
+        $carId = $args['carId'];	        
 
         if ($car = $this->carModel->getCarById($carId)) {	       
          
@@ -46,10 +29,11 @@ $app-> group('/cars', function (){
         return $response->withJson([ 'message' => 'Nem létezik ilyen autó!' ], 404);	       
     });	  
     
-    $this->post('/insert', function ($request, $response) {
-        
+    $this->put('/[{carId}]', function ($request, $response, $args) {
+
         $datas = $request->getParsedBody();
-        $response = $this->carModel->insertCar($datas);
+        $id = $args['carId'];
+        $response = $this->carModel->updateCar($id, $datas);
 
         return $this->response->withJson(['message' => $response]);
     });
@@ -65,14 +49,20 @@ $app-> group('/cars', function (){
         return $this->response->withJson(['message' => 'Hiba történt']);
     }); 
 
-    $this->put('/[{carId}]', function ($request, $response, $args) {
 
-        $datas = $request->getParsedBody();
-        $id = $args['carId'];
-        $response = $this->carModel->updateCar($id, $datas);
+    $this->get('/filter', function ($request, $response) {	 
 
-        return $this->response->withJson(['message' => $response]);
-    });
+        $field = $request->getQueryParam('field');
+        $keyword = $request->getQueryParam('keyword');
+   
+
+        if ($car = $this->carModel->getByFilter($field, $keyword)) {	       
+         
+            return $response->withJson($car);	          
+        }	
+
+        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti autó!' ], 404);	       
+    });	
     
     
 })->add($SessionMiddleware); 

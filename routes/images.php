@@ -2,41 +2,24 @@
 
 $app-> group('/images', function (){
 
-    $this->get('', function ($request, $response) {
-
-        $session = $request->getAttribute('session');	    
+    $this->get('', function ($request, $response) {  
 
         $carImage = $this->imageModel->getAllCarImages();	      
     
         return $response->withJson($carImage);	     
     });	   
-    
-    $this->get('/filter', function ($request, $response) {	 
 
-        $field = $request->getQueryParam('field');
-        $keyword = $request->getQueryParam('keyword');
+    $this->post('', function ($request, $response) {
+        
+        $datas = $request->getParsedBody();
+        $response = $this->imageModel->insertCarImage($datas);
 
-        if (!$session = $request->getAttribute('session')) {	
-
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
-        }	     
-
-        if ($carImage = $this->imageModel->getByFilter($field, $keyword)) {	       
-         
-            return $response->withJson($carImage);	          
-        }	
-
-        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti kép!' ], 404);	       
-    });	
+        return $this->response->withJson(['message' => $response]);
+    });
 	    
-    $this->get('/{fileId}', function ($request, $response, $args) {	 
+    $this->get('/[{fileId}]', function ($request, $response, $args) {	 
 
-        $fileId = $args['fileId'];	 
-
-        if (!$session = $request->getAttribute('session')) {	
-
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
-        }	        
+        $fileId = $args['fileId'];	         
 
         if ($carImage = $this->imageModel->getCarImageById($fileId)) {	       
          
@@ -45,11 +28,12 @@ $app-> group('/images', function (){
 
         return $response->withJson([ 'message' => 'Nem létezik ilyen kép!' ], 404);	       
     });	  
-    
-    $this->post('/insert', function ($request, $response) {
-        
+
+    $this->put('/[{fileId}]', function ($request, $response, $args) {
+
         $datas = $request->getParsedBody();
-        $response = $this->imageModel->insertCarImage($datas);
+        $fileId = $args['fileId'];
+        $response = $this->imageModel->updateCarImage($fileId, $datas);
 
         return $this->response->withJson(['message' => $response]);
     });
@@ -65,14 +49,19 @@ $app-> group('/images', function (){
         return $this->response->withJson(['message' => 'Hiba történt']);
     }); 
 
-    $this->put('/[{fileId}]', function ($request, $response, $args) {
+        
+    $this->get('/filter', function ($request, $response) {	 
 
-        $datas = $request->getParsedBody();
-        $fileId = $args['fileId'];
-        $response = $this->imageModel->updateCarImage($fileId, $datas);
+        $field = $request->getQueryParam('field');
+        $keyword = $request->getQueryParam('keyword'); 
 
-        return $this->response->withJson(['message' => $response]);
-    });
+        if ($carImage = $this->imageModel->getByFilter($field, $keyword)) {	       
+         
+            return $response->withJson($carImage);	          
+        }	
+
+        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti kép!' ], 404);	       
+    });	
     
     
 })->add($SessionMiddleware); 

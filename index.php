@@ -61,6 +61,24 @@ $container['User'] = function ($container) {
     return new User($container);
 };
 
+$container['Car'] = function ($container) {
+    require_once 'lib/Car.php';
+
+    return new Car($container);
+};
+
+$container['Image'] = function ($container) {
+    require_once 'lib/Image.php';
+
+    return new Image($container);
+};
+
+$container['Service'] = function ($container) {
+    require_once 'lib/Service.php';
+
+    return new Service($container);
+};
+
 
 require_once 'middlewares/session.php';
 require_once 'middlewares/auth.php';

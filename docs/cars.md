@@ -3,7 +3,8 @@
 [vissza](index.md)
 
 ## **GET** /cars
-Visszadja az összes kocsit.
+Visszadja az összes kocsit kiegészítve, hogy a biztosítás érvényes-e vagy sem.(*insurance_status*)
+
 	
 ### Response
 ```json
@@ -22,7 +23,8 @@ Visszadja az összes kocsit.
 	"insurance_id": "biztositas szama",	
 	"insurance_until_date": "2020-11-02",
 	"car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",	
-	"available_status": 1
+	"available_status": 1,
+	"insurance_status": true
 }
 ```
 
@@ -30,7 +32,7 @@ Visszadja az összes kocsit.
 Egy kocsi beszúrása.
 
 ## **GET** /cars/:carId
-Egy carId-t vár és visszaadja az adott kocsit.
+Egy carId-t vár és visszaadja az adott kocsit kiegészítve, hogy a biztosítás érvényes-e vagy sem.(*insurance_status*)
 
 ### Request
 ```json
@@ -56,7 +58,8 @@ Egy carId-t vár és visszaadja az adott kocsit.
 	"insurance_id": "biztositas szama",	
 	"insurance_until_date": "2020-11-02",
 	"car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",	
-	"available_status": 1
+	"available_status": 1,
+	"insurance_status": true
 }
 ```
 

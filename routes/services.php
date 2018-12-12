@@ -2,9 +2,7 @@
 
 $app->group('/services', function (){
     
-    $this->get('', function ($request, $response) {
-
-        $session = $request->getAttribute('session');	    
+    $this->get('', function ($request, $response) {    
 
         $carService = $this->serviceModel->getAllCarServices();	      
         
@@ -14,21 +12,17 @@ $app->group('/services', function (){
     $this->post('', function ($request, $response) {
         
         $datas = $request->getParsedBody();
-        $response = $this->serviceModel->insertCarService($datas);
-
-        return $this->response->withJson(['message' => $response]);
+        $response = $this->Car->insertService($datas);
+        $message = $this->serviceModel->getServiceById($response);
+        
+        return $this->response->withJson(['message' => $message ? $message : $response]);
     });
 
     
     $this->get('/[{serviceId}]', function ($request, $response, $args) {	 
 
         $serviceId = $args['serviceId'];	 
-
-        if (!$session = $request->getAttribute('session')) {	
-
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
-        }	        
-
+       
         if ($carService = $this->serviceModel->geCarServiceById($serviceId)) {	       
          
             return $response->withJson($carService);	          
@@ -42,9 +36,10 @@ $app->group('/services', function (){
 
         $datas = $request->getParsedBody();
         $id = $args['serviceId'];
-        $response = $this->serviceModel->updateCarService($id, $datas);
-
-        return $this->response->withJson(['message' => $response]);
+        $response = $this->Service->updateService($id, $datas);
+        $message = $this->serviceModel->getServiceById($response);
+        
+        return $this->response->withJson(['message' => $message ? $message : $response]);
     });
 
     $this->delete('/[{serviceId}]', function ($request, $response, $args) {
@@ -61,12 +56,7 @@ $app->group('/services', function (){
     $this->get('/filter', function ($request, $response) {	 
 
         $field = $request->getQueryParam('field');
-        $keyword = $request->getQueryParam('keyword');
-
-        if (!$session = $request->getAttribute('session')) {	
-
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
-        }	        
+        $keyword = $request->getQueryParam('keyword');        
 
         if ($carService = $this->serviceModel->getByFilter($field, $keyword)) {	       
          
@@ -76,4 +66,4 @@ $app->group('/services', function (){
     });	
     
     
-})->add($SessionMiddleware); 
+})->add($AuthenticationMiddleware); 

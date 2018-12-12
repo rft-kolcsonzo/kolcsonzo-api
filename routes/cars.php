@@ -4,25 +4,35 @@ $app-> group('/cars', function (){
 
     $this->get('', function ($request, $response) { 
 
-        $car = $this->carModel->getAllCars();	      
+        $cars = $this->carModel->getAllCars();	      
     
-        return $response->withJson($car);	     
+        return $response->withJson($cars);	     
     });	   
 
     $this->post('', function ($request, $response) {
         
         $datas = $request->getParsedBody();
-        $response = $this->carModel->insertCar($datas);
-
-        return $this->response->withJson(['message' => $response]);
+        $response = $this->Car->insertCar($datas);
+        $message = $this->carModel->getCarById($response);
+        
+        return $this->response->withJson(['message' => $message ? $message : $response]);
     });
 	    
     $this->get('/[{carId}]', function ($request, $response, $args) {	 
 
-        $carId = $args['carId'];	        
+        $carId = $args['carId']; 
+        $insuranceDate = $request->getAttribute('insurance_until_date');
 
         if ($car = $this->carModel->getCarById($carId)) {	       
-         
+
+            $today = date("Y-m-d");
+            $valid_date = date("Y-m-d", $insurance_until_date);
+
+            if($today > $valid_date)
+                $car["insurance_status"] =  true;
+            else
+                $car["insurance_status"] =  false;
+                
             return $response->withJson($car);	          
         }	        
 
@@ -33,9 +43,10 @@ $app-> group('/cars', function (){
 
         $datas = $request->getParsedBody();
         $id = $args['carId'];
-        $response = $this->carModel->updateCar($id, $datas);
-
-        return $this->response->withJson(['message' => $response]);
+        $response = $this->Car->updateCar($id, $datas);
+        $message = $this->carModel->getCarById($response);
+        
+        return $this->response->withJson(['message' => $message ? $message : $response]);
     });
 
     $this->delete('/[{carId}]', function ($request, $response, $args) {
@@ -65,4 +76,4 @@ $app-> group('/cars', function (){
     });	
     
     
-})->add($SessionMiddleware); 
+})->add($AuthenticationMiddleware); 

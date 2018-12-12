@@ -53,4 +53,5 @@ class CarModel extends Model
                         ->fetch();
         
     }
+
 }

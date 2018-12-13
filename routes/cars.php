@@ -4,8 +4,24 @@ $app-> group('/cars', function (){
 
     $this->get('', function ($request, $response) { 
 
-        $cars = $this->carModel->getAllCars();	      
-    
+        $cars = $this->carModel->getAllCars();	 
+        
+        foreach($cars as $one_car => $car)
+        {
+            foreach($car as $car_key => $car_value)
+            {
+                if($car_key == "insurance_until_date")       
+        
+                    $today = date("Y-m-d");
+                    $valid_date = date("Y-m-d", $car_value);
+        
+                    if($today > $valid_date)
+                        $car["insurance_status"] =  true;
+                    else
+                        $car["insurance_status"] =  false;
+            }
+        }
+
         return $response->withJson($cars);	     
     });	   
 

@@ -70,16 +70,16 @@ keyword: milyen értékkel.
 Ez alapján megvalósítható a felhasználó ID vagy az autó ID szerinti keresés is.</pre>
 
 <p>get->orders/orderId</p>
-<pre>Egy orderId-t vár és visszaadja az adott rendelést.</pre>
+<pre>Egy orderId-t vár és visszaadja az adott ID-vel rendelkező rendelést.</pre>
 
 <p>post->orders/insert</p>
-<pre>Egy kocsi beszúrása.</pre>
+<pre>Egy rendelés beszúrása.</pre>
 
 <p>delete->orders/orderId</p>
-<pre>Egy orderId alapján törli az adott kocsit.</pre>
+<pre>Egy orderId alapján törli az adott rendelést.</pre>
 
 <p>put->orders/orderId</p>
-<pre>Egy orderId alapján frissíti az adatokat az adott kocsin.</pre>
+<pre>Egy orderId alapján frissíti az adatokat az adott rendelésen.</pre>
 
 
 

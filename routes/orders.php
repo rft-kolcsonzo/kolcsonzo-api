@@ -112,6 +112,20 @@ $app->group('/orders', function (){
         return $this->response->withJson(['message' => $response]);
     });
 
+    //POST /orders/multifilter
+    $this->post('/multifilter', function ($request, $response) {
+        $session = $request->getAttribute('session');
+		$jsonBody = $request->getParsedBody();
+		$jsonArray = json_decode($jsonBody['multifilter'], TRUE);
+
+        if (!$session = $request->getAttribute('session')) {
+            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
+        }
+
+        $response = $this->orderModel->getByMultiFilter($jsonArray);
+        return $this->response->withJson(['message' => $response]);
+    });
+
     // GET /orders/{orderId}
     $this->get('/{orderId}', function ($request, $response, $args) {
         $session = $request->getAttribute('session');

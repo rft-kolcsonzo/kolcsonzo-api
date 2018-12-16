@@ -103,7 +103,17 @@ class OrderModel extends Model
                         ->from('rent_orders')
                         ->where($field, 'like', '%'.$keyword.'%')
                         ->execute()
-                        ->fetch();
+                        ->fetchAll();
+    }
+
+    public function getByMultiFilter($whereParams)
+    {
+        return $this->db->select()
+                        ->from('rent_orders')
+                        ->whereMany($whereParams, 'LIKE', 'AND')
+                        ->execute()
+                        ->fetchAll();
+					
     }
 
     public function getOrderByField($field, $keyword)

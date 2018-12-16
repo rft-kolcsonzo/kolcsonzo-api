@@ -69,6 +69,12 @@ field: melyik mező alapján akarsz lekérdezni,
 keyword: milyen értékkel.
 Ez alapján megvalósítható a felhasználó ID vagy az autó ID szerinti keresés is.</pre>
 
+<p>post->orders/multifilter</p>
+<pre>Egy json-t vár paraméterként (a paraméter key: 'multifilter', form-dataként), amely 'field' és egy 'keyword' tulajdonságokat tartalmaz.
+field: melyik mező alapján akarsz lekérdezni,
+keyword: milyen értékkel.
+Ezzel olyan szűréseket tudsz megvalósítani, ami nemcsak egy szempont szerint keres, hanem több feltétellel tovább szűkíted a találati listát.</pre>
+
 <p>get->orders/orderId</p>
 <pre>Egy orderId-t vár és visszaadja az adott ID-vel rendelkező rendelést.</pre>
 

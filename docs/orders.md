@@ -78,8 +78,8 @@ Ezzel olyan szűréseket tudsz megvalósítani, ami nemcsak egy szempont szerint
 <p>get->orders/orderId</p>
 <pre>Egy orderId-t vár és visszaadja az adott ID-vel rendelkező rendelést.</pre>
 
-<p>post->orders/insert</p>
-<pre>Egy rendelés beszúrása.</pre>
+<p>post->orders</p>
+<pre>Paraméterként megkapja a rendelés adatait és létrehozza a rendelést az adatbázisban.</pre>
 
 <p>delete->orders/orderId</p>
 <pre>Egy orderId alapján törli az adott rendelést.</pre>

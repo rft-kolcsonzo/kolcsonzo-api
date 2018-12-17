@@ -65,7 +65,7 @@ function generate_pdf($order, $car){
     $pdf->SetXY(17, 76.8);
     $pdf->Cell(86,6,iconv('UTF-8', 'ISO-8859-2', $car['born_date']));
 
-    $pdf->SetXY(108, 76.8);
+    $pdf->SetXY(108, 76.8); 
     $pdf->Cell(86,6,iconv('UTF-8', 'ISO-8859-2', $car['color']));
 
     $pdf->SetXY(154, 76.8);

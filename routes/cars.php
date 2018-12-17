@@ -28,7 +28,8 @@ $app-> group('/cars', function (){
     $this->post('', function ($request, $response) {
         
         $datas = $request->getParsedBody();
-        $response = $this->Car->insertCar($datas);
+        
+        $response = $this->Car->validCar($datas, true);
         $message = $this->carModel->getCarById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);
@@ -45,9 +46,9 @@ $app-> group('/cars', function (){
             $valid_date = date("Y-m-d", $insurance_until_date);
 
             if($today > $valid_date)
-                $car["insurance_status"] =  true;
+                $car['insurance_status'] =  true;
             else
-                $car["insurance_status"] =  false;
+                $car['insurance_status'] =  false;
                 
             return $response->withJson($car);	          
         }	        
@@ -59,7 +60,8 @@ $app-> group('/cars', function (){
 
         $datas = $request->getParsedBody();
         $id = $args['carId'];
-        $response = $this->Car->updateCar($id, $datas);
+
+        $response = $this->Car->validCar($datas, false);
         $message = $this->carModel->getCarById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);
@@ -81,10 +83,18 @@ $app-> group('/cars', function (){
 
         $field = $request->getQueryParam('field');
         $keyword = $request->getQueryParam('keyword');
-   
+        $insuranceDate = $request->getAttribute('insurance_until_date');
 
         if ($car = $this->carModel->getByFilter($field, $keyword)) {	       
-         
+
+            $today = date("Y-m-d");
+            $valid_date = date("Y-m-d", $insurance_until_date);
+
+            if($today > $valid_date)
+                $car['insurance_status'] =  true;
+            else
+                $car['insurance_status'] =  false;
+                
             return $response->withJson($car);	          
         }	
 

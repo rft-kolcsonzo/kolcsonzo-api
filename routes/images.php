@@ -12,9 +12,11 @@ $app-> group('/images', function (){
     $this->post('', function ($request, $response) {
         
         $datas = $request->getParsedBody();
-        $response = $this->imageModel->insertCarImage($datas);
 
-        return $this->response->withJson(['message' => $response]);
+        $response = $this->Image->validImage($datas, true);
+        $message = $this->imageModel->getImageById($response);
+        
+        return $this->response->withJson(['message' => $message ? $message : $response]);
     });
 	    
     $this->get('/[{fileId}]', function ($request, $response, $args) {	 
@@ -32,10 +34,12 @@ $app-> group('/images', function (){
     $this->put('/[{fileId}]', function ($request, $response, $args) {
 
         $datas = $request->getParsedBody();
-        $fileId = $args['fileId'];
-        $response = $this->imageModel->updateCarImage($fileId, $datas);
+        $id = $args['fileId'];
 
-        return $this->response->withJson(['message' => $response]);
+        $response = $this->Image->validImage($id, false);
+        $message = $this->imageModel->getImagerById($response);
+
+        return $this->response->withJson(['message' => $message ? $message : $response]);
     });
 
     $this->delete('/[{fileId}]', function ($request, $response, $args) {
@@ -64,4 +68,4 @@ $app-> group('/images', function (){
     });	
     
     
-})->add($SessionMiddleware); 
+})->add($AuthenticationMiddleware); 

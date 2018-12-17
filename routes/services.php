@@ -12,7 +12,8 @@ $app->group('/services', function (){
     $this->post('', function ($request, $response) {
         
         $datas = $request->getParsedBody();
-        $response = $this->Car->insertService($datas);
+
+        $response = $this->Car->validService($datas, true);
         $message = $this->serviceModel->getServiceById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);
@@ -36,7 +37,8 @@ $app->group('/services', function (){
 
         $datas = $request->getParsedBody();
         $id = $args['serviceId'];
-        $response = $this->Service->updateService($id, $datas);
+
+        $response = $this->Service->validService($datas, false);
         $message = $this->serviceModel->getServiceById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);

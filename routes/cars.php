@@ -16,14 +16,36 @@ $app-> group('/cars', function (){
                     $valid_date = date("Y-m-d", $car_value);
         
                     if($today > $valid_date)
-                        $car["insurance_status"] =  true;
+                        $car['insurance_status'] =  true;
                     else
-                        $car["insurance_status"] =  false;
+                        $car['insurance_status'] =  false;
             }
         }
 
         return $response->withJson($cars);	     
     });	   
+
+    $this->get('/filter', function ($request, $response) {	 
+
+        $field = $request->getQueryParam('field');
+        $keyword = $request->getQueryParam('keyword');
+        $insuranceDate = $request->getAttribute('insurance_until_date');
+
+        if ($car = $this->carModel->getByFilter($field, $keyword)) {	       
+
+            $today = date("Y-m-d");
+            $valid_date = date("Y-m-d", $insurance_until_date);
+
+            if($today > $valid_date)
+                $car['insurance_status'] =  true;
+            else
+                $car['insurance_status'] =  false;
+                
+            return $response->withJson($car);	          
+        }	
+
+        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti autó!' ], 404);	       
+    });	
 
     $this->post('', function ($request, $response) {
         
@@ -78,28 +100,6 @@ $app-> group('/cars', function (){
         return $this->response->withJson(['message' => 'Hiba történt']);
     }); 
 
-
-    $this->get('/filter', function ($request, $response) {	 
-
-        $field = $request->getQueryParam('field');
-        $keyword = $request->getQueryParam('keyword');
-        $insuranceDate = $request->getAttribute('insurance_until_date');
-
-        if ($car = $this->carModel->getByFilter($field, $keyword)) {	       
-
-            $today = date("Y-m-d");
-            $valid_date = date("Y-m-d", $insurance_until_date);
-
-            if($today > $valid_date)
-                $car['insurance_status'] =  true;
-            else
-                $car['insurance_status'] =  false;
-                
-            return $response->withJson($car);	          
-        }	
-
-        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti autó!' ], 404);	       
-    });	
     
     
-})->add($AuthenticationMiddleware); 
+});//->add($AuthenticationMiddleware); 

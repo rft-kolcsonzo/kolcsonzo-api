@@ -9,12 +9,25 @@ $app->group('/services', function (){
         return $response->withJson($carService);	     
     });	    
 
+    
+    $this->get('/filter', function ($request, $response) {	 
+
+        $field = $request->getQueryParam('field');
+        $keyword = $request->getQueryParam('keyword');        
+
+        if ($carService = $this->serviceModel->getByFilter($field, $keyword)) {	       
+         
+            return $response->withJson($carService);	          
+        }	        
+        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti szervíz információ!' ], 404);	       
+    });	
+
     $this->post('', function ($request, $response) {
         
         $datas = $request->getParsedBody();
 
-        $response = $this->Car->validService($datas, true);
-        $message = $this->serviceModel->getServiceById($response);
+        $response = $this->Service->validService($datas, true);
+        $message = $this->serviceModel->getCarServiceById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);
     });
@@ -39,7 +52,7 @@ $app->group('/services', function (){
         $id = $args['serviceId'];
 
         $response = $this->Service->validService($datas, false);
-        $message = $this->serviceModel->getServiceById($response);
+        $message = $this->serviceModel->getCarServiceById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);
     });
@@ -55,17 +68,6 @@ $app->group('/services', function (){
         return $this->response->withJson(['message' => 'Hiba történt']);
     }); 
 
-    $this->get('/filter', function ($request, $response) {	 
-
-        $field = $request->getQueryParam('field');
-        $keyword = $request->getQueryParam('keyword');        
-
-        if ($carService = $this->serviceModel->getByFilter($field, $keyword)) {	       
-         
-            return $response->withJson($carService);	          
-        }	        
-        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti szervíz információ!' ], 404);	       
-    });	
     
     
-})->add($AuthenticationMiddleware); 
+});//->add($AuthenticationMiddleware); 

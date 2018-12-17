@@ -9,6 +9,19 @@ $app-> group('/images', function (){
         return $response->withJson($carImage);	     
     });	   
 
+    $this->get('/filter', function ($request, $response) {	 
+
+        $field = $request->getQueryParam('field');
+        $keyword = $request->getQueryParam('keyword'); 
+
+        if ($carImage = $this->imageModel->getByFilter($field, $keyword)) {	       
+         
+            return $response->withJson($carImage);	          
+        }	
+
+        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti kép!' ], 404);	       
+    });	
+
     $this->post('', function ($request, $response) {
         
         $datas = $request->getParsedBody();
@@ -52,20 +65,6 @@ $app-> group('/images', function (){
 
         return $this->response->withJson(['message' => 'Hiba történt']);
     }); 
-
-        
-    $this->get('/filter', function ($request, $response) {	 
-
-        $field = $request->getQueryParam('field');
-        $keyword = $request->getQueryParam('keyword'); 
-
-        if ($carImage = $this->imageModel->getByFilter($field, $keyword)) {	       
-         
-            return $response->withJson($carImage);	          
-        }	
-
-        return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti kép!' ], 404);	       
-    });	
     
     
 })->add($AuthenticationMiddleware); 

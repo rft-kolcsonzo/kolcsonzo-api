@@ -12,6 +12,16 @@ class SessionModel extends Model
             ->fetch();
     }
 
+    public function getUserById($id)
+    {
+        return $this->db
+            ->select(array('is_admin'))
+            ->from( 'users' )
+            ->where( 'user_id', '=', $id )
+            ->execute()
+            ->fetch();
+    }
+
     public function create($data)
     {
         return $this->db->insert( array_keys( $data ) )

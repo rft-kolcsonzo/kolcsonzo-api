@@ -4,12 +4,13 @@ $app->group('/orders', function (){
     // GET /orders
 
     $this->get('', function ($request, $response) {
+        /*
         $session = $request->getAttribute('session');
         
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
-		
+		*/
         $orders = $this->orderModel->getAllOrder();
         
         return $response->withJson($orders);
@@ -17,12 +18,13 @@ $app->group('/orders', function (){
 
     //get active orders
     $this->get('/active_orders', function ($request, $response) {
+        /*
         $session = $request->getAttribute('session');
         
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
-		
+		*/
         $orders = $this->orderModel->getActiveOrders();
         
         return $response->withJson($orders);
@@ -30,12 +32,13 @@ $app->group('/orders', function (){
     
     //get closed orders
     $this->get('/closed_orders', function ($request, $response) {
+        /*
         $session = $request->getAttribute('session');
         
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
-		
+		*/
         $orders = $this->orderModel->getClosedOrders();
         
         return $response->withJson($orders);
@@ -43,12 +46,13 @@ $app->group('/orders', function (){
     
     //get orders by period
     $this->get('/startperiod', function ($request, $response) {
+        /*
         $session = $request->getAttribute('session');
 		
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
-		
+		*/
         $startdate = $request->getQueryParam('startdate');
         $enddate = $request->getQueryParam('enddate');
         
@@ -59,12 +63,13 @@ $app->group('/orders', function (){
     
     //get orders by period
     $this->get('/endperiod', function ($request, $response) {
+        /*
         $session = $request->getAttribute('session');
 		
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
-		
+		*/
         $startdate = $request->getQueryParam('startdate');
         $enddate = $request->getQueryParam('enddate');
         
@@ -75,12 +80,13 @@ $app->group('/orders', function (){
     
     //get orders by car parameters
     $this->get('/cars', function ($request, $response) {
+        /*
         $session = $request->getAttribute('session');
 		
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
-		
+		*/
         $carField = $request->getQueryParam('field');
         $carValue = $request->getQueryParam('keyword');
          
@@ -100,13 +106,16 @@ $app->group('/orders', function (){
     
     //GET /orders/filter
     $this->get('/filter', function ($request, $response) {
+        /*
         $session = $request->getAttribute('session');
-        $field = $request->getQueryParam('field');
-        $keyword = $request->getQueryParam('keyword');
-
+        
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
+        */
+        $field = $request->getQueryParam('field');
+        $keyword = $request->getQueryParam('keyword');
+
 
         $response = $this->orderModel->getByFilter($field, $keyword);
         return $this->response->withJson(['message' => $response]);
@@ -114,13 +123,16 @@ $app->group('/orders', function (){
 
     //POST /orders/multifilter
     $this->post('/multifilter', function ($request, $response) {
+        /*
         $session = $request->getAttribute('session');
-		$jsonBody = $request->getParsedBody();
-		$jsonArray = json_decode($jsonBody['multifilter'], TRUE);
-
+        
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
+        */
+		$jsonBody = $request->getParsedBody();
+		$jsonArray = json_decode($jsonBody['multifilter'], TRUE);
+
 
         $response = $this->orderModel->getByMultiFilter($jsonArray);
         return $this->response->withJson(['message' => $response]);
@@ -128,12 +140,14 @@ $app->group('/orders', function (){
 
     // GET /orders/{orderId}
     $this->get('/{orderId}', function ($request, $response, $args) {
+        /*
         $session = $request->getAttribute('session');
-        $id = $args['orderId'];
 
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
+        */
+        $id = $args['orderId'];
 
         if ($order = $this->orderModel->getOrderById($id)) {
 
@@ -145,14 +159,15 @@ $app->group('/orders', function (){
     
     // GET /orders/print-to-pdf/{orderId}
     $this->get('/print-to-pdf/{orderId}', function ($request, $response, $args) {
+        /*
         $session = $request->getAttribute('session');
-        $id = $args['orderId'];
 		
-/*
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
-*/
+        */
+        $id = $args['orderId'];
+
         if ($order = $this->orderModel->getOrderById($id)) {
 			require(getcwd().'../includes/functions.php');
 			$car = $this->carModel->getCarById($order['car_id']);
@@ -165,24 +180,26 @@ $app->group('/orders', function (){
     });
     
     $this->post('/', function ($request, $response) {
+        /*
         $session = $request->getAttribute('session');
         
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
-
+        */
         $datas = $request->getParsedBody();
         $response = $this->orderModel->insertOrder($datas);
         return $this->response->withJson(['message' => $response]);
     });
 
     $this->delete('/[{orderId}]', function ($request, $response, $args) {
+        /*
         $session = $request->getAttribute('session');
 		
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
-		
+		*/
         $id = $args['orderId'];
 
         if ($this->orderModel->deleteOrder($id)) {
@@ -193,12 +210,13 @@ $app->group('/orders', function (){
     }); 
 
     $this->put('/[{orderId}]', function ($request, $response, $args) {
+        /*
         $session = $request->getAttribute('session');
 		
         if (!$session = $request->getAttribute('session')) {
             return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
         }
-		
+		*/
         $datas = $request->getParsedBody();
         $id = $args['orderId'];
         $response = $this->orderModel->updateOrder($id, $datas);

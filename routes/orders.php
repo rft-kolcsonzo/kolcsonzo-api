@@ -143,6 +143,27 @@ $app->group('/orders', function (){
         return $response->withJson([ 'message' => 'Nem létezik ilyen rendelés!' ], 404);
     });
     
+    // GET /orders/print-to-pdf/{orderId}
+    $this->get('/print-to-pdf/{orderId}', function ($request, $response, $args) {
+        $session = $request->getAttribute('session');
+        $id = $args['orderId'];
+		
+/*
+        if (!$session = $request->getAttribute('session')) {
+            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);
+        }
+*/
+        if ($order = $this->orderModel->getOrderById($id)) {
+			require(getcwd().'../includes/functions.php');
+			$car = $this->carModel->getCarById($order['car_id']);
+			$order = $this->orderModel->getOrderById($id);
+			return generate_pdf($order, $car);
+        }
+		else{
+			return $response->withJson([ 'message' => 'Nem létezik ilyen rendelés!' ], 404);
+		}
+    });
+    
     $this->post('/', function ($request, $response) {
         $session = $request->getAttribute('session');
         

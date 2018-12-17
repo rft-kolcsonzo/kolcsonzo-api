@@ -87,5 +87,8 @@ Ezzel olyan szűréseket tudsz megvalósítani, ami nemcsak egy szempont szerint
 <p>put->orders/orderId</p>
 <pre>Egy orderId alapján frissíti az adatokat az adott rendelésen.</pre>
 
+<p>get->orders/print-to-pdf/orderId</p>
+<pre>Az adott rendelés alapján legenerálja a pdf formátumú szerződést és visszaadja a linkjét. Minden alkalommal újragenerálja, akkor is ha létezik már ilyen néven szerződés, így ha időközben módosították a szerződés adatait, akkor már az új adatok lesznek a pdfben. A pdf nevének formátuma: berleti_szerzodes_ON000 + rendelés száma.pdf</pre>
+
 
 

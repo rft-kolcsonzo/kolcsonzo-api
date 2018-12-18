@@ -8,7 +8,7 @@ class CarModel extends Model
         return $this->db->select()
                         ->from('cars')
                         ->execute()
-                        ->fetch();
+                        ->fetchAll();
     }
 
     public function getCarById($id)
@@ -50,7 +50,7 @@ class CarModel extends Model
                         ->from('cars')
                         ->where($field, 'like', '%'.$keyword.'%')
                         ->execute()
-                        ->fetch();
+                        ->fetchAll();
         
     }
 

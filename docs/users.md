@@ -47,26 +47,6 @@ az email cím validálva van.
 }
 ```
 
-## **POST** /users/login
-> **TODO**: áthelyezni a /auth endpointhoz
-
-### Request
-```json
-{
-    "user_email": "teszt@teszt.hu",
-    "password": "teszt"
-}
-```
-
-### Response
-```json
-{
-    "type": "accesToken",
-    "token": "fghfjgdjdjkdjkdkdktud33k3k3ukd3k",
-    "created_time": "2018-11-25 11:11:20" 
-}
-```
-
 ## **DELETE** /users/:userId
 Adott user törlése.
 

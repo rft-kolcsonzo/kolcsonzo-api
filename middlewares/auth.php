@@ -21,7 +21,12 @@ class AuthenticationMiddleware
             if (!$result) {
                 return $response->withJson([ 'message' => 'Nem létező munkamenet az X-Session-Token headerben!' ], 412);
             } else {
+                $is_admin = $this->model->getUserById($result['user_id']);
+                
+                $request = $request->withAttribute('is_admin', $is_admin['is_admin']);
+                
                 return $next($request, $response);
+                
             }
         } else {
             return $response->withJson([ 'message' => 'Hiányzó Token!' ], 412 );

@@ -14,7 +14,6 @@ $app->group('/users', function (){
         $userId = $args['userId'];
 
         if ($user = $this->userModel->getUserById($userId)) {
-            
             return $response->withJson($user);
         }
 
@@ -23,6 +22,9 @@ $app->group('/users', function (){
 
     $this->post('/', function ($request, $response) {
 
+        if (!$request->getAttribute('is_admin')) {
+            return $response->withJson([ 'message' => 'Nincs joga ehhez a művelethez!' ], 403);
+        }
         $datas = $request->getParsedBody();
         $response = $this->User->insertUser($datas);
 

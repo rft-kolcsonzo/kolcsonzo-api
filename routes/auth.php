@@ -24,4 +24,22 @@ $app->group('/auth', function (){
         }
 
     });
+
+     $this->post('/token', function ($request, $response, $args) {
+        
+        $input = $request->getParsedBody();
+
+        $answer = $this->userModel->getByToken($input);
+        
+        if ($answer) {
+
+            return $response->withJson([
+                $answer
+            ]);
+
+        } else {
+            return $response->withJson([ 'message' => 'Nincs ilyen token' ], 404 );
+        }
+
+    });
 });

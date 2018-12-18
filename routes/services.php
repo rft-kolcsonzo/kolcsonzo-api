@@ -4,9 +4,14 @@ $app->group('/services', function (){
     
     $this->get('', function ($request, $response) {    
 
-        $carService = $this->serviceModel->getAllCarServices();	      
+        if($carService = $this->serviceModel->getAllCarServices())
+        {
+
+            return $response->withJson($carService);
+        }	      
         
-        return $response->withJson($carService);	     
+        return $response->withJson([ 'message' => 'Nincsenek szervíz információk!' ], 404);
+	     
     });	    
 
     
@@ -26,18 +31,18 @@ $app->group('/services', function (){
         
         $datas = $request->getParsedBody();
 
-        $response = $this->Service->validService($datas, true);
+        $response = $this->Service->validService($id, $datas, true);
         $message = $this->serviceModel->getCarServiceById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);
     });
 
     
-    $this->get('/[{serviceId}]', function ($request, $response, $args) {	 
+    $this->get('/[{carId}]', function ($request, $response, $args) {	 
 
-        $serviceId = $args['serviceId'];	 
+        $carId = $args['carId'];	 
        
-        if ($carService = $this->serviceModel->geCarServiceById($serviceId)) {	       
+        if ($carService = $this->serviceModel->getCarServiceById($carId)) {	       
          
             return $response->withJson($carService);	          
         }
@@ -46,20 +51,20 @@ $app->group('/services', function (){
     });	   
 
     
-    $this->put('/[{serviceId}]', function ($request, $response, $args) {
+    $this->put('/[{carId}]', function ($request, $response, $args) {
 
         $datas = $request->getParsedBody();
-        $id = $args['serviceId'];
+        $id = $args['carId'];
 
-        $response = $this->Service->validService($datas, false);
+        $response = $this->Service->validService($id, $datas, false);
         $message = $this->serviceModel->getCarServiceById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);
     });
 
-    $this->delete('/[{serviceId}]', function ($request, $response, $args) {
+    $this->delete('/[{carId}]', function ($request, $response, $args) {
 
-        $id = $args['serviceId'];
+        $id = $args['carId'];
 
          if ($this->serviceModel->deleteCarService($id)) {
             return $this->response->withJson(['message' => 'Sikeres törlés']);

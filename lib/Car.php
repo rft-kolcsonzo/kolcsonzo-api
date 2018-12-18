@@ -11,7 +11,7 @@ class Car
         $this->model = new CarModel($container);
     }
 
-    public function validCar($datas, $method)
+    public function validCar($id, $datas, $method)
     {
         try {
                 if (!$datas) {
@@ -54,14 +54,18 @@ class Car
                     throw new Exception('A biztosítás lejárata mező kötelező');
                 }
 
-                if (!isset($datas['available_status']) || !$datas['available_status']) {
+                if (!isset($datas['available_status'])) {
                     throw new Exception('A kocsi elérhetősége mező kötelező');
+                }
+
+                if ($datas['available_status'] > 1 || $datas['available_status'] < 0 ) {
+                    throw new Exception('A kocsi elérhetősége mező érvénytelen adatot kapott');
                 }
             
                 if($method)
                     return $this->model->insertCar($datas);
                 else    
-                    return $this->model->updateCar($datas);
+                    return $this->model->updateCar($id, $datas);
             
         } catch (Exception $e) {
            return $e->getMessage();

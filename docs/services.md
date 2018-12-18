@@ -20,13 +20,32 @@ Visszadja az összes szerviz infot.
 ## **POST** /services
 Egy szerviz info beszúrása.
 
-## **GET** /services/:serviceId
-Egy serviceId-t vár és visszaadja az adott szerviz infot.
+### Request
+```json
+{
+	"service_id": 2,	
+	"car_id": 3,	
+	"service_date": "2018-12-03",	
+	"runned_km": 200,	
+	"need_to_fix": 0,	
+	"ready_to_work": 0
+}
+```
+
+### Response
+```json
+{
+    "message": "1"
+}
+```
+
+## **GET** /services/:carId
+Egy carId-t vár és visszaadja az adott szerviz infot.
 
 ### Request
 ```json
 {
-	"serviceId": 1
+	"carId": 1
 }
 ```
 
@@ -42,21 +61,10 @@ Egy serviceId-t vár és visszaadja az adott szerviz infot.
 }
 ```
 
-## **PUT** /services/:serviceId
-Egy serviceId alapján frissíti az adatokat az adott szerviz infon.
-
-## **DELETE** /services/:serviceId
-Egy serviceId alapján törli az adott szerviz infot.
+## **PUT** /services/:carId
+Egy carId alapján frissíti az adatokat az adott szerviz infon.
 
 ### Request
-```json
-{
-	"serviceId": 2,
-	"ready_to_work": 1
-}
-```
-
-### Response
 ```json
 {
 	"service_id": 2,	
@@ -65,6 +73,23 @@ Egy serviceId alapján törli az adott szerviz infot.
 	"runned_km": 200,	
 	"need_to_fix": 0,	
 	"ready_to_work": 0
+}
+```
+
+### Response
+```json
+{
+    "message": 1
+}
+```
+
+## **DELETE** /services/:carId
+Egy carId alapján törli az adott szerviz infot.
+
+### Response
+```json
+{
+    "message": "Sikeres törlés"
 }
 ```
 

@@ -10,6 +10,7 @@ Visszadja az összes kocsit kiegészítve, hogy a biztosítás érvényes-e vagy
 ```json
 {
 	"car_id": 1,	
+	"plate_number": "asd324",	
 	"modell": "model_nev",	
 	"type": "tipus",	
 	"factory_id": "gyartasi_szam",	
@@ -31,21 +32,61 @@ Visszadja az összes kocsit kiegészítve, hogy a biztosítás érvényes-e vagy
 ## **POST** /cars
 Egy kocsi beszúrása.
 
-## **GET** /cars/:carId
-Egy carId-t vár és visszaadja az adott kocsit kiegészítve, hogy a biztosítás érvényes-e vagy sem.(*insurance_status*)
-
 ### Request
 ```json
 {
-	"carId": 1
+	"car_id": 2,	
+	"plate_number": "asd324",	
+	"modell": "model_nev",	
+	"type": "tipus",	
+	"factory_id": "gyartasi_szam",	
+	"persons": 2,	
+	"doors_number": 4,	
+	"category": "kategoria",	
+	"tags": "tag",	
+	"color": "piros",
+	"born_date": "2018-01-02",	
+	"insurance_name": "biztositas neve",	
+	"insurance_id": "biztositas szama",	
+	"insurance_until_date": "2020-11-02",
+	"car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",	
+	"available_status": 1
 }
 ```
 
 ### Response
 ```json
 {
+    "message": {
+        "car_id": 2,
+        "plate_number": "asd324",
+        "modell": "model_nev",
+        "type": "tipus",
+        "factory_id": "gyartasi_szam",
+        "persons": 2,
+        "doors_number": 4,
+        "category": "kategoria",
+        "tags": "tag",
+        "color": "piros",
+        "born_date": "2018-01-02",
+        "insurance_name": "biztositas neve",
+        "insurance_id": "biztositas szama",
+        "insurance_until_date": "2020-11-02",
+        "car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",
+        "available_status": 1
+    }
+}
+```
+
+## **GET** /cars/:carId
+Egy carId-t vár és visszaadja az adott kocsit kiegészítve, hogy a biztosítás érvényes-e vagy sem.(*insurance_status*)
+
+### Response
+```json
+{
 	"car_id": 1,	
-	"modell": "model_nev",	
+	"plate_number": "asd324",	
+	"modell": "model_nev",
 	"type": "tipus",	
 	"factory_id": "gyartasi_szam",	
 	"persons": 2,	
@@ -66,21 +107,37 @@ Egy carId-t vár és visszaadja az adott kocsit kiegészítve, hogy a biztosít�
 ## **PUT** cars/:carId
 Egy carId alapján frissíti az adatokat az adott kocsin.
 
-## **DELETE** cars/:carId
-Egy carId alapján törli az adott kocsit.
-
 ### Request
 ```json
 {
-	"carId": 2,
-	"color": "kék"
+	"car_id": 2,	
+	"plate_number": "asd324",	
+	"modell": "model_nev",	
+	"type": "tipus",	
+	"factory_id": "gyartasi_szam",	
+	"persons": 2,	
+	"doors_number": 4,	
+	"category": "kategoria",	
+	"tags": "tag",	
+	"color": "piros",
+	"born_date": "2018-01-02",	
+	"insurance_name": "biztositas neve",	
+	"insurance_id": "biztositas szama",	
+	"insurance_until_date": "2020-11-02",
+	"car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",	
+	"available_status": 1
 }
 ```
+
+## **DELETE** cars/:carId
+Egy carId alapján törli az adott kocsit.
+
 
 ### Response
 ```json
 {
 	"car_id": 1,	
+	"plate_number": "asd324",
 	"modell": "model_nev",	
 	"type": "tipus",	
 	"factory_id": "gyartasi_szam",	
@@ -94,7 +151,8 @@ Egy carId alapján törli az adott kocsit.
 	"insurance_id": "biztositas szama",	
 	"insurance_until_date": "2020-11-02",
 	"car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",	
-	"available_status": 1
+	"available_status": 1,
+	"insurance_status": true
 }
 ```
 
@@ -114,7 +172,8 @@ Egy **field** és egy **keyword** paramétert vár.
 ### Response
 ```json
 {
-	"car_id": 1,	
+	"car_id": 1,
+	"plate_number": "asd-324",		
 	"modell": "model_nev",	
 	"type": "tipus",	
 	"factory_id": "gyartasi_szam",	
@@ -128,7 +187,8 @@ Egy **field** és egy **keyword** paramétert vár.
 	"insurance_id": "biztositas szama",	
 	"insurance_until_date": "2020-11-02",
 	"car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",	
-	"available_status": 1
+	"available_status": 1,
+	"insurance_status": true
 }
 ```
 

@@ -4,9 +4,13 @@ $app-> group('/images', function (){
 
     $this->get('', function ($request, $response) {  
 
-        $carImage = $this->imageModel->getAllCarImages();	      
+        if($carImage = $this->imageModel->getAllCarImages())
+        {
+
+            return $response->withJson($carImage);
+        }	      
     
-        return $response->withJson($carImage);	     
+        return $response->withJson([ 'message' => 'Nincsenek képek!' ], 404);	    	     
     });	   
 
     $this->get('/filter', function ($request, $response) {	 
@@ -26,8 +30,8 @@ $app-> group('/images', function (){
         
         $datas = $request->getParsedBody();
 
-        $response = $this->Image->validImage($datas, true);
-        $message = $this->imageModel->getImageById($response);
+        $response = $this->Image->validImage($id, $datas, true);
+        $message = $this->imageModel->getCarImageById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);
     });
@@ -49,8 +53,8 @@ $app-> group('/images', function (){
         $datas = $request->getParsedBody();
         $id = $args['fileId'];
 
-        $response = $this->Image->validImage($id, false);
-        $message = $this->imageModel->getImagerById($response);
+        $response = $this->Image->validImage($id, $datas, false);
+        $message = $this->imageModel->getCarImageById($response);
 
         return $this->response->withJson(['message' => $message ? $message : $response]);
     });
@@ -67,4 +71,4 @@ $app-> group('/images', function (){
     }); 
     
     
-})->add($AuthenticationMiddleware); 
+});//->add($AuthenticationMiddleware); 

@@ -18,13 +18,13 @@ Visszadja az összes kocsi kép infot.
 ## **POST** /images
 Egy kocsi kép info beszúrása.
 
-## **GET** /images/:fileId
-Egy fileId-t vár és visszaadja az adott kocsi kép infot.
+## **GET** /images/:carId
+Egy carId-t vár és visszaadja az adott kocsi id-hoz tartó kép infót.
 
 ### Request
 ```json
 {
-	"fileId": 3
+	"carId": 3
 }
 ```
 ### Response
@@ -38,18 +38,29 @@ Egy fileId-t vár és visszaadja az adott kocsi kép infot.
 }
 ```
 
-## **PUT** /images/:fileId
-Egy fileId alapján frissíti az adatokat az adott kocsi kép infon.
+## **PUT** /images/:carId
+Egy carId alapján frissíti az adatokat az adott kocsi kép infon.
 
-## **DELETE** /images/:fileId
-Egy fileId alapján törli az adott kocsi kép infot.
-
-### request
+### Request
 ```json
 {
-	"fileId": 5,
-	"filename": "Öreg_opel.jpg"
+	"file_id": 5,
+	"car_id": 3,
+	"filename": "Király_lada.jpg",		
+	"pathdir": "pics",
+	"pathurl": "file:///c://this/is/a/path/to/pics"
 }
+```
+
+### Response
+```json
+{
+    "message": "5"
+}
+```
+
+## **DELETE** /images/:carId
+Egy carId alapján törli az adott kocsi kép infot.
 
 ### Response
 ```json

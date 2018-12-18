@@ -11,7 +11,7 @@ class Image
         $this->model = new ImageModel($container);
     }
 
-    public function validImage($datas, $method)
+    public function validImage($id, $datas, $method)
     {
         try {
                 if (!$datas) {
@@ -31,9 +31,9 @@ class Image
                 }
             
                 if($method)
-                    return $this->model->insertImage($datas);
+                    return $this->model->insertCarImage($datas);
                 else    
-                    return $this->model->updateImage($datas);
+                    return $this->model->updateCarImage($id, $datas);
                 
             
         } catch (Exception $e) {

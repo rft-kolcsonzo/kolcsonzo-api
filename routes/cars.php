@@ -1,47 +1,55 @@
-<?php
+x0<?php
 
 $app-> group('/cars', function (){
 
     $this->get('', function ($request, $response) { 
 
-        $cars = $this->carModel->getAllCars();	 
-        
-        foreach($cars as $one_car => $car)
+        if($cars = $this->carModel->getAllCars())
         {
-            foreach($car as $car_key => $car_value)
+            $cars_array = array();
+            $today = date('Y-m-d');
+  
+            foreach($cars as $carItem)
             {
-                if($car_key == "insurance_until_date")       
-        
-                    $today = date("Y-m-d");
-                    $valid_date = date("Y-m-d", $car_value);
-        
-                    if($today > $valid_date)
-                        $car['insurance_status'] =  true;
-                    else
-                        $car['insurance_status'] =  false;
-            }
-        }
+                $valid_date = date('Y-m-d',strtotime( $carItem['insurance_until_date']));
+              
+                if($today < $valid_date) 
+                    $carItem['insurance_status'] =  true; 
+                else 
+                    $carItem['insurance_status'] =  false; 
 
-        return $response->withJson($cars);	     
+                $cars_array[] = $carItem;    	                
+            }
+    
+            return $response->withJson($cars_array);
+        }	 
+
+        return $response->withJson([ 'message' => 'Nincsenek autók!' ], 404);	     
     });	   
 
     $this->get('/filter', function ($request, $response) {	 
 
         $field = $request->getQueryParam('field');
         $keyword = $request->getQueryParam('keyword');
-        $insuranceDate = $request->getAttribute('insurance_until_date');
 
-        if ($car = $this->carModel->getByFilter($field, $keyword)) {	       
+        if ($cars = $this->carModel->getByFilter($field, $keyword)) {	       
 
-            $today = date("Y-m-d");
-            $valid_date = date("Y-m-d", $insurance_until_date);
+            $today = date('Y-m-d');
+            $cars_array = array();
 
-            if($today > $valid_date)
-                $car['insurance_status'] =  true;
-            else
-                $car['insurance_status'] =  false;
+            foreach($cars as $carItem){
+
+                $valid_date = date('Y-m-d',strtotime( $carItem['insurance_until_date']));
+    
+                if($today < $valid_date)
+                    $carItem['insurance_status'] =  true;
+                else
+                    $carItem['insurance_status'] =  false;	
                 
-            return $response->withJson($car);	          
+                $cars_array[] = $carItem; 
+            }
+
+            return $response->withJson($cars_array);	          
         }	
 
         return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti autó!' ], 404);	       
@@ -51,7 +59,7 @@ $app-> group('/cars', function (){
         
         $datas = $request->getParsedBody();
         
-        $response = $this->Car->validCar($datas, true);
+        $response = $this->Car->validCar($id, $datas, true);
         $message = $this->carModel->getCarById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);
@@ -59,15 +67,14 @@ $app-> group('/cars', function (){
 	    
     $this->get('/[{carId}]', function ($request, $response, $args) {	 
 
-        $carId = $args['carId']; 
-        $insuranceDate = $request->getAttribute('insurance_until_date');
+        $carId = $args['carId'];         
 
         if ($car = $this->carModel->getCarById($carId)) {	       
 
-            $today = date("Y-m-d");
-            $valid_date = date("Y-m-d", $insurance_until_date);
+            $today = date('Y-m-d');
+            $valid_date = date('Y-m-d',strtotime( $car['insurance_until_date']));
 
-            if($today > $valid_date)
+            if( $today < $valid_date )
                 $car['insurance_status'] =  true;
             else
                 $car['insurance_status'] =  false;
@@ -76,14 +83,14 @@ $app-> group('/cars', function (){
         }	        
 
         return $response->withJson([ 'message' => 'Nem létezik ilyen autó!' ], 404);	       
-    });	  
+    });	
     
     $this->put('/[{carId}]', function ($request, $response, $args) {
 
         $datas = $request->getParsedBody();
         $id = $args['carId'];
 
-        $response = $this->Car->validCar($datas, false);
+        $response = $this->Car->validCar($id, $datas, false);
         $message = $this->carModel->getCarById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);
@@ -102,4 +109,4 @@ $app-> group('/cars', function (){
 
     
     
-});//->add($AuthenticationMiddleware); 
+})->add($AuthenticationMiddleware); 

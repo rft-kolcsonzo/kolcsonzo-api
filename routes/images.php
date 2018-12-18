@@ -71,4 +71,4 @@ $app-> group('/images', function (){
     }); 
     
     
-});//->add($AuthenticationMiddleware); 
+})->add($AuthenticationMiddleware); 

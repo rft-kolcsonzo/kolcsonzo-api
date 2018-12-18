@@ -31,8 +31,8 @@ class CarModel extends Model
     public function deleteCar($id)
     {
         return $this->db->delete()
-                        ->from('cars c')
-                        ->where('c.car_id', '=', $id)
+                        ->from('cars')
+                        ->where('car_id', '=', $id)
                         ->execute();
     }
 

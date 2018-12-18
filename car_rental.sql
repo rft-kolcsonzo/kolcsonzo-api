@@ -32,7 +32,7 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `cars`;
 CREATE TABLE `cars` (
   `car_id` int(6) NOT NULL,
-  `plate_number` CHARACTER(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `plate_number` varchar(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL UNIQUE,
   `modell` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `type` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `factory_id` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE `cars` (
   `insurance_id` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `insurance_until_date` date NOT NULL,
   `car_status_details` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `available_status` tinyint(4) NOT NULL
+  `available_status` BOOLEAN NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -137,6 +137,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `user_id` int(6) NOT NULL,
   `email` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `password` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `firstname` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `lastname` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `profile_img` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,

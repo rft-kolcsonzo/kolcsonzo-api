@@ -75,4 +75,4 @@ $app->group('/services', function (){
 
     
     
-});//->add($AuthenticationMiddleware); 
+})->add($AuthenticationMiddleware); 

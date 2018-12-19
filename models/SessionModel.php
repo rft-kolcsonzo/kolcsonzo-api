@@ -6,8 +6,8 @@ class SessionModel extends Model
     {
         return $this->db
             ->select()
-            ->from( 'sessions' )
-            ->where( 'access_token', '=', $token )
+            ->from('sessions')
+            ->where('access_token', '=', $token)
             ->execute()
             ->fetch();
     }
@@ -15,18 +15,18 @@ class SessionModel extends Model
     public function getUserById($id)
     {
         return $this->db
-            ->select(array('is_admin'))
-            ->from( 'users' )
-            ->where( 'user_id', '=', $id )
+            ->select(array('user_id', 'is_admin', 'firstname', 'lastname', 'email'))
+            ->from('users')
+            ->where('user_id', '=', $id)
             ->execute()
             ->fetch();
     }
 
     public function create($data)
     {
-        return $this->db->insert( array_keys( $data ) )
-                ->into( 'sessions' )
-                ->values( array_values( $data ) )
-                ->execute();
+        return $this->db->insert(array_keys($data))
+            ->into('sessions')
+            ->values(array_values($data))
+            ->execute();
     }
 }

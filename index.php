@@ -6,13 +6,13 @@ require_once 'lib/Model.php';
 require_once 'lib/Criteria.php';
 require_once 'exceptions/ValidationException.php';
 
-$app = new \Slim\App([ 'settings' => $config ]);
+$app = new \Slim\App(['settings' => $config]);
 $container = $app->getContainer();
 
 $container['db'] = function ($c) {
     $db = $c['settings']['db'];
     $pdo = new \Slim\PDO\Database(
-        "mysql:host=". $db['host'] . ";dbname=" . $db['dbname'] . ";charset=utf8",
+        "mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'] . ";charset=utf8",
         $db['user'],
         $db['pass']
     );
@@ -80,6 +80,12 @@ $container['Service'] = function ($container) {
     return new Service($container);
 };
 
+$container['Order'] = function ($container) {
+    require_once 'lib/Order.php';
+
+    return new Order($container);
+};
+
 
 require_once 'middlewares/session.php';
 require_once 'middlewares/auth.php';
@@ -96,6 +102,14 @@ $app->group($config['basePath'], function () use ($app, $container) {
     require_once 'routes/user.php';
     require_once 'routes/auth.php';
     require_once 'routes/orders.php';
+});
+
+$app->add(function ($req, $res, $next) {
+    try {
+        return $next($req, $res);
+    } catch (Exception $err) {
+        return $res->withJson(['message' => $err->getMessage()], 500);
+    }
 });
 
 // Add middleware function: this function will be called with every request

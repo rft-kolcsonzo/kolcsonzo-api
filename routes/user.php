@@ -17,24 +17,25 @@ $app->group('/users', function () {
             return $response->withJson($user);
         }
 
-        return $response->withJson([ 'message' => 'Nem létezik ilyen felhasználó!' ], 404);
+        return $response->withJson(['message' => 'Nem létezik ilyen felhasználó!'], 404);
     });
 
     $this->post('', function ($request, $response) {
+        $user = $request->getAttribute('user');
 
-        if (!$request->getAttribute('is_admin')) {
-            return $response->withJson([ 'message' => 'Nincs joga ehhez a művelethez!' ], 403);
+        if ($user['is_admin']) {
+            return $response->withJson(['message' => 'Nincs joga ehhez a művelethez!'], 403);
         }
         $datas = $request->getParsedBody();
+
         try {
             $userId = $this->User->insertUser($datas);
+            $user = $this->userModel->getUserById($userId);
+
+            return $this->response->withJson($user);
         } catch (ValidationException $e) {
             return $response->withJson(['field' => $e->getField(), 'message' => $e->getMessage()], 406);
         }
-
-        $user = $this->userModel->getUserById($response);
-        
-        return $this->response->withJson($user);
     });
 
     $this->delete('/[{userId}]', function ($request, $response, $args) {
@@ -51,14 +52,13 @@ $app->group('/users', function () {
         $datas = $request->getParsedBody();
         $id = $args['id'];
         try {
-            $response = $this->User->updateUser($id, $datas);
+            $this->User->updateUser($id, $datas);
+            $user = $this->userModel->getUserById($id);
+
+            return $this->response->withJson($user);
         } catch (ValidationException $e) {
             return $response->withJson(['field' => $e->getField(), 'message' => $e->getMessage()], 406);
         }
-        
-        $user = $this->userModel->getUserById($id);
-
-        return $this->response->withJson($user);
     });
 
 })->add($AuthenticationMiddleware); // Use SessionMiddleware

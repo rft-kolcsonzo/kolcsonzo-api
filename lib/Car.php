@@ -3,7 +3,7 @@
 require_once 'models/CarModel.php';
 
 class Car
-{    
+{
     protected $model;
 
     public function __construct($container)
@@ -49,16 +49,12 @@ class Car
             throw new ValidationException('insurance_until_date', 'A biztosítás lejárata mező kötelező');
         }
 
-        if (!isset($datas['available_status'])) {
-            throw new ValidationException('available_status', 'A kocsi elérhetősége mező kötelező');
-        }
-
         if (isset($datas['available_status']) && !!$datas['available_status']) {
             $datas['available_status'] = true;
         } else {
             $datas['available_status'] = false;
         }
-    
+
         if (!$id) {
             return $this->model->insertCar($datas);
         } else {

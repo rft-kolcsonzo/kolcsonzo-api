@@ -14,21 +14,23 @@ class AuthenticationMiddleware
         $token = null;
         if ($request->hasHeader('Authorization')) {
             list($type, $token) = explode(' ', $request->getHeader('Authorization')[0]);
+        } elseif ($accessToken = $request->getQueryParam('access_token')) {
+            $token = $accessToken;
         }
-        
+
         if ($token) {
             $result = $this->model->getByToken($token);
             if (!$result) {
-                return $response->withJson([ 'message' => 'Hozzáférés nem engedélyezett!' ], 403);
+                return $response->withJson(['message' => 'Hozzáférés nem engedélyezett!'], 403);
             } else {
-                $is_admin = $this->model->getUserById($result['user_id']);
-                
-                $request = $request->withAttribute('is_admin', $is_admin['is_admin']);
-                
+                $user = $this->model->getUserById($result['user_id']);
+
+                $request = $request->withAttribute('user', $user);
+
                 return $next($request, $response);
             }
         } else {
-            return $response->withJson([ 'message' => 'Hiányzó Token!' ], 401);
+            return $response->withJson(['message' => 'Hiányzó Token!'], 401);
         }
     }
 }

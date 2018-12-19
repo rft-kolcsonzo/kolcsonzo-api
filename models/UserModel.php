@@ -4,18 +4,43 @@ class UserModel extends Model
     
     public function getAll()
     {
-        return $this->db->select()
-                        ->from('users u')
-                        ->where('u.enabled_status', '=', 1)
-                        ->execute()
-                        ->fetch();
+        $result = $this->db
+            ->select(array('user_id','email','firstname', 'lastname','is_admin'))
+            ->from('users u')
+            ->where('u.enabled_status', '=', 1)
+            ->where('u.deleted', '=', 0)
+            ->execute()
+            ->fetchAll();
+
+        foreach ($result as &$row) {
+            $row['is_admin'] = !!$row['is_admin'];
+        }
+
+        return $result;
     }
 
     public function getUserById($id)
     {
-        return $this->db->select()
+        $result = $this->db->select(array('user_id','email','firstname', 'lastname','is_admin'))
                         ->from('users u')
                         ->where('u.user_id', '=', $id)
+                        ->where('u.enabled_status', '=', 1)
+                        ->where('u.deleted', '=', 0)
+                        ->execute()
+                        ->fetch();
+
+        if ($result) {
+            $result['is_admin'] = !!$result['is_admin'];
+        }
+
+        return $result;
+    }
+
+    public function getUser($field, $data)
+    {
+        return $this->db->select()
+                        ->from('users u')
+                        ->where('u.'.$field, '=', $data)
                         ->execute()
                         ->fetch();
     }
@@ -29,18 +54,20 @@ class UserModel extends Model
 
     public function deleteUser($id)
     {
-        return $this->db->delete()
-                        ->from('users')
-                        ->where('user_id', '=', $id)
-                        ->execute();
+        return $this->db->update(array('deleted' => 1))
+                    ->table('users')
+                    ->where('user_id', '=', $id)
+                    ->execute();
     }
 
     public function updateUser($id, $datas)
     {
-        return $this->db->update($datas)
+        $this->db->update($datas)
                         ->table('users')
                         ->where('user_id', '=', $id)
                         ->execute();
+        return $id;
+                        
     }
 
     public function login($email, $password)
@@ -49,6 +76,8 @@ class UserModel extends Model
                         ->from('users u')
                         ->where('u.email', '=', $email)
                         ->where('u.password', '=', $password)
+                        ->where('u.enabled_status', '=', 1)
+                        ->where('u.deleted', '=', 0)
                         ->execute()
                         ->fetch();
     }
@@ -67,6 +96,26 @@ class UserModel extends Model
                         ->where('s.session_id', '=', $id)
                         ->execute()
                         ->fetch();
+    }
+
+    public function getByToken($token)
+    {
+        $id = $this->db
+            ->select(array('user_id'))
+            ->from( 'sessions' )
+            ->where( 'access_token', '=', $token['token'] )
+            ->execute()
+            ->fetch();
+        
+        return $this->db->select(array('is_admin'))
+                        ->from('users u')
+                        ->where('u.user_id', '=', $id['user_id'])
+                        ->where('u.enabled_status', '=', 1)
+                        ->where('u.deleted', '=', 0)
+                        ->execute()
+                        ->fetch();
+        
+
     }
 
 }

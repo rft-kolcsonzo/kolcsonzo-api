@@ -2,24 +2,23 @@
 
 $app->group('/services', function (){
     
-    $this->get('', function ($request, $response) {
+    $this->get('', function ($request, $response) {    
 
-        $session = $request->getAttribute('session');	    
+        if($carService = $this->serviceModel->getAllCarServices())
+        {
 
-        $carService = $this->serviceModel->getAllCarServices();	      
+            return $response->withJson($carService);
+        }	      
         
-        return $response->withJson($carService);	     
+        return $response->withJson([ 'message' => 'Nincsenek szervíz információk!' ], 404);
+	     
     });	    
 
+    
     $this->get('/filter', function ($request, $response) {	 
 
         $field = $request->getQueryParam('field');
-        $keyword = $request->getQueryParam('keyword');
-
-        if (!$session = $request->getAttribute('session')) {	
-
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
-        }	        
+        $keyword = $request->getQueryParam('keyword');        
 
         if ($carService = $this->serviceModel->getByFilter($field, $keyword)) {	       
          
@@ -27,35 +26,45 @@ $app->group('/services', function (){
         }	        
         return $response->withJson([ 'message' => 'Nem létezik ilyen filter szerinti szervíz információ!' ], 404);	       
     });	
+
+    $this->post('', function ($request, $response) {
+        
+        $datas = $request->getParsedBody();
+
+        $response = $this->Service->validService($id, $datas, true);
+        $message = $this->serviceModel->getCarServiceById($response);
+        
+        return $this->response->withJson(['message' => $message ? $message : $response]);
+    });
+
     
-    $this->get('/{serviceId}', function ($request, $response, $args) {	 
+    $this->get('/[{carId}]', function ($request, $response, $args) {	 
 
-        $serviceId = $args['serviceId'];	 
-
-        if (!$session = $request->getAttribute('session')) {	
-
-            return $response->withJson([ 'message' => 'Csak aktív munkafolyamatban érhető el ez a metódus!' ], 412);	           
-        }	        
-
-        if ($carService = $this->serviceModel->geCarServiceById($serviceId)) {	       
+        $carId = $args['carId'];	 
+       
+        if ($carService = $this->serviceModel->getCarServiceById($carId)) {	       
          
             return $response->withJson($carService);	          
         }
 
         return $response->withJson([ 'message' => 'Nem létezik ilyen szervíz információ!' ], 404);	       
     });	   
-    
-    $this->post('/insert', function ($request, $response) {
-        
-        $datas = $request->getParsedBody();
-        $response = $this->serviceModel->insertCarService($datas);
 
-        return $this->response->withJson(['message' => $response]);
+    
+    $this->put('/[{carId}]', function ($request, $response, $args) {
+
+        $datas = $request->getParsedBody();
+        $id = $args['carId'];
+
+        $response = $this->Service->validService($id, $datas, false);
+        $message = $this->serviceModel->getCarServiceById($response);
+        
+        return $this->response->withJson(['message' => $message ? $message : $response]);
     });
 
-    $this->delete('/[{serviceId}]', function ($request, $response, $args) {
+    $this->delete('/[{carId}]', function ($request, $response, $args) {
 
-        $id = $args['serviceId'];
+        $id = $args['carId'];
 
          if ($this->serviceModel->deleteCarService($id)) {
             return $this->response->withJson(['message' => 'Sikeres törlés']);
@@ -64,14 +73,6 @@ $app->group('/services', function (){
         return $this->response->withJson(['message' => 'Hiba történt']);
     }); 
 
-    $this->put('/[{serviceId}]', function ($request, $response, $args) {
-
-        $datas = $request->getParsedBody();
-        $id = $args['serviceId'];
-        $response = $this->serviceModel->updateCarService($id, $datas);
-
-        return $this->response->withJson(['message' => $response]);
-    });
     
     
-})->add($SessionMiddleware); 
+})->add($AuthenticationMiddleware); 

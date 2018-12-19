@@ -8,15 +8,15 @@ class ServiceModel extends Model
         return $this->db->select()
                         ->from('car_services')
                         ->execute()
-                        ->fetch();
+                        ->fetchAll();
     }
 
-    public function geCarServiceById($id)
+    public function getCarServiceById($id)
     {
 
         return $this->db->select()
                         ->from('car_services c')
-                        ->where('c.service_id', '=', $id)
+                        ->where('c.car_id', '=', $id)
                         ->execute()
                         ->fetch();
     }
@@ -25,18 +25,16 @@ class ServiceModel extends Model
     {       
         return $this->db->insert($datas)
                         ->into('car_services')
-                        ->execute()
-                        ->fetch();
+                        ->execute();
     }
 
     public function deleteCarService($id)
     {
 
         return $this->db->delete()
-                        ->from('car_services c')
-                        ->where('c.service_id', '=', $id)
-                        ->execute()
-                        ->fetch();
+                        ->from('car_services')
+                        ->where('car_id', '=', $id)
+                        ->execute();
     }
 
     public function updateCarService($id, $datas)
@@ -44,9 +42,8 @@ class ServiceModel extends Model
 
         return $this->db->update($datas)
                         ->table('car_services c')
-                        ->where('c.service_id', '=', $id)
-                        ->execute()
-                        ->fetch();
+                        ->where('c.car_id', '=', $id)
+                        ->execute();
     }
     
     public function getByFilter($field, $keyword)
@@ -55,7 +52,7 @@ class ServiceModel extends Model
                         ->from('car_services')
                         ->where($field, 'like', '%'.$keyword.'%')
                         ->execute()
-                        ->fetch();
+                        ->fetchAll();
         
     }
 }

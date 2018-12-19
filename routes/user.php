@@ -1,9 +1,8 @@
 <?php
 
-$app->group('/users', function (){
+$app->group('/users', function () {
     // GET /users
     $this->get('', function ($request, $response) {
-        $session = $request->getAttribute('session');
 
         $users = $this->userModel->getAll();
 
@@ -15,42 +14,28 @@ $app->group('/users', function (){
         $userId = $args['userId'];
 
         if ($user = $this->userModel->getUserById($userId)) {
-            
             return $response->withJson($user);
         }
 
-        return $response->withJson([ 'message' => 'Nem létezik ilyen felhasználó!' ], 404);
+        return $response->withJson(['message' => 'Nem létezik ilyen felhasználó!'], 404);
     });
 
-    $this->post('/', function ($request, $response) {
+    $this->post('', function ($request, $response) {
+        $user = $request->getAttribute('user');
 
-        $datas = $request->getParsedBody();
-        $response = $this->User->insertUser($datas);
-        return $this->response->withJson(['message' => $response]);
-    });
-
-    $this->post('/login', function ($request, $response, $args) {
-        $datas = ($_POST);
-        $input = $request->getParsedBody();
-
-        $answer = $this->User->login($datas);
-        
-        if ($answer) {
-
-            $insertId = $this->userModel->insertToken($answer);
-            
-            $insertedData = $this->userModel->getTokenData($insertId);
-
-            return $response->withJson([
-                'type'  => 'accessToken',
-                'token' => $insertedData['access_token'],
-                'created_time' => $insertedData['created_at']
-            ]);
-
-        } else {
-            return $response->withJson([ 'message' => 'Érvénytelen belépési adatok!' ], 404 );
+        if ($user['is_admin']) {
+            return $response->withJson(['message' => 'Nincs joga ehhez a művelethez!'], 403);
         }
+        $datas = $request->getParsedBody();
 
+        try {
+            $userId = $this->User->insertUser($datas);
+            $user = $this->userModel->getUserById($userId);
+
+            return $this->response->withJson($user);
+        } catch (ValidationException $e) {
+            return $response->withJson(['field' => $e->getField(), 'message' => $e->getMessage()], 406);
+        }
     });
 
     $this->delete('/[{userId}]', function ($request, $response, $args) {
@@ -66,8 +51,14 @@ $app->group('/users', function (){
     $this->put('/[{id}]', function ($request, $response, $args) {
         $datas = $request->getParsedBody();
         $id = $args['id'];
-        $response = $this->User->updateUser($id, $datas);
-        return $this->response->withJson(['message' => $response]);
+        try {
+            $this->User->updateUser($id, $datas);
+            $user = $this->userModel->getUserById($id);
+
+            return $this->response->withJson($user);
+        } catch (ValidationException $e) {
+            return $response->withJson(['field' => $e->getField(), 'message' => $e->getMessage()], 406);
+        }
     });
 
-})->add($SessionMiddleware); // Use SessionMiddleware
+})->add($AuthenticationMiddleware); // Use SessionMiddleware

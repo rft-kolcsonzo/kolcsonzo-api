@@ -1,51 +1,148 @@
 # Cars endpoint
 
-> **!!TODO!!** Oldal ˙jra form·z·sa a users.md-hez hasonlÛan.
+[vissza](index.md)
 
-get->cars
+## **GET** /cars
+Visszadja az √∂sszes kocsit kieg√©sz√≠tve, hogy a biztos√≠t√°s √©rv√©nyes-e vagy sem.(*insurance_status*)
 
-	Visszadja az ˆsszes kocsit.
-	Pl:
-	{
-		"car_id": 1,	
-		"modell": "model_nev",	
-		"type": "tipus",	
-		"factory_id": "gyartasi_szam",	
-		"persons": 2,	
-		"doors_number": 4,	
-		"category": "kategoria",	
-		"tags": "tag",	
-		"color": "piros",
-		"born_date": "2018-01-02",	
-		"insurance_name": "biztositas neve",	
-		"insurance_id": "biztositas szama",	
-		"insurance_until_date": "2020-11-02",
-		"car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",	
-		"available_status": 1
-
-	}
-
-get->cars/filter
 	
-	Egy 'field' Ès egy 'keyword' paramÈtert v·r.
-	field: melyik mezı alapj·n akarsz lekÈrdezni,
-	keyword: milyen ÈrtÈkkel.
+### Response
+```json
+{
+	"car_id": 1,	
+	"plate_number": "asd324",	
+	"modell": "model_nev",	
+	"type": "tipus",	
+	"factory_id": "gyartasi_szam",	
+	"persons": 2,	
+	"doors_number": 4,	
+	"category": "kategoria",	
+	"tags": "tag",	
+	"color": "piros",
+	"born_date": "2018-01-02",	
+	"insurance_name": "biztositas neve",	
+	"insurance_id": "biztositas szama",	
+	"insurance_until_date": "2020-11-02",
+	"car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",	
+	"available_status": 1,
+	"insurance_status": true
+}
+```
 
-get->cars/carId
+## **POST** /cars
+Egy kocsi besz√∫r√°sa.
 
-	Egy carId-t v·r Ès visszaadja az adott kocsit.
+### Request
+```json
+{
+	"car_id": 2,	
+	"plate_number": "asd324",	
+	"modell": "model_nev",	
+	"type": "tipus",	
+	"factory_id": "gyartasi_szam",	
+	"persons": 2,	
+	"doors_number": 4,	
+	"category": "kategoria",	
+	"tags": "tag",	
+	"color": "piros",
+	"born_date": "2018-01-02",	
+	"insurance_name": "biztositas neve",	
+	"insurance_id": "biztositas szama",	
+	"insurance_until_date": "2020-11-02",
+	"car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",	
+	"available_status": 1
+}
+```
 
-post->cars/insert
+### Response
+```json
+{
+    "message": "1"
+}
+```
 
-	Egy kocsi besz˙r·sa.
+## **GET** /cars/:carId
+Egy carId-t v√°r √©s visszaadja az adott kocsit kieg√©sz√≠tve, hogy a biztos√≠t√°s √©rv√©nyes-e vagy sem.(*insurance_status*)
 
-delete->cars/carId
+### Response
+```json
+{
+	"car_id": 1,	
+	"plate_number": "asd324",	
+	"modell": "model_nev",
+	"type": "tipus",	
+	"factory_id": "gyartasi_szam",	
+	"persons": 2,	
+	"doors_number": 4,	
+	"category": "kategoria",	
+	"tags": "tag",	
+	"color": "piros",
+	"born_date": "2018-01-02",	
+	"insurance_name": "biztositas neve",	
+	"insurance_id": "biztositas szama",	
+	"insurance_until_date": "2020-11-02",
+	"car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",	
+	"available_status": 1,
+	"insurance_status": true
+}
+```
 
-	Egy carId alapj·n tˆrli az adott kocsit.
+## **PUT** cars/:carId
+Egy carId alapj√°n friss√≠ti az adatokat az adott kocsin.
 
-put->cars/carId
+### Request
+```json
+{
+    "message": 1
+}
+```
 
-	Egy carId alapj·n frissÌti az adatokat az adott kocsin.
+## **DELETE** cars/:carId
+Egy carId alapj√°n t√∂rli az adott kocsit.
+
+
+### Response
+```json
+{
+    "message": "Sikeres t√∂rl√©s"
+}
+```
+
+## **GET** /cars/filter
+Egy **field** √©s egy **keyword** param√©tert v√°r.
+* *field*: 
+	* melyik mez≈ë alapj√°n akarsz lek√©rdezni,
+* *keyword*: 
+	* milyen √©rt√©kkel.
+
+### Request
+```json
+{
+	"persons": 4
+}
+```
+### Response
+```json
+{
+	"car_id": 1,
+	"plate_number": "asd-324",		
+	"modell": "model_nev",	
+	"type": "tipus",	
+	"factory_id": "gyartasi_szam",	
+	"persons": 4,	
+	"doors_number": 4,	
+	"category": "kategoria",	
+	"tags": "tag",	
+	"color": "piros",
+	"born_date": "2018-01-02",	
+	"insurance_name": "biztositas neve",	
+	"insurance_id": "biztositas szama",	
+	"insurance_until_date": "2020-11-02",
+	"car_status_details": "A kocsirol egy leiras, hogy mi is van vele.",	
+	"available_status": 1,
+	"insurance_status": true
+}
+```
 
 
 

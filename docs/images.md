@@ -1,40 +1,109 @@
 # Images endpoint
 
-> **!!TODO!!** Oldal újra formázása a users.md-hez hasonlóan.
+[vissza](index.md)
 
-get->images
-
-	Visszadja az �sszes kocsi k�p infot.
+## **GET** /images
+Visszadja az összes kocsi kép infot.
 	
-	Pl:
-	{
-		"file_id": 5,
-		"car_id": 3,
-		"filename": "Kir�ly lada.jpg",
-		"pathdir": "pics",
-		"pathur": "file:///c://this/is/a/path/to/pics"
-	}
+### Response
+```json
+{
+	"file_id": 5,
+	"car_id": 3,
+	"filename": "Király_lada.jpg",		
+	"pathdir": "pics",
+	"pathur": "file:///c://this/is/a/path/to/pics"
+}
+```
 
-get->images/filter
-	
-	Egy 'field' �s egy 'keyword' param�tert v�r.
-	field: melyik mez� alapj�n akarsz lek�rdezni,
-	keyword: milyen �rt�kkel.
+## **POST** /images
+Egy kocsi kép info beszúrása.
 
-get->images/imageId
+### Request
+```json
+{
+	"file_id": 5,
+	"car_id": 3,
+	"filename": "Király_lada.jpg",		
+	"pathdir": "pics",
+	"pathur": "file:///c://this/is/a/path/to/pics"
+}
 
-	Egy imageId-t v�r �s visszaadja az adott kocsi k�p infot.
+### Response
+```json
+{
+    "message": "1"
+}
+```
 
-post->images/insert
+## **GET** /images/:carId
+Egy carId-t vár és visszaadja az adott kocsi id-hoz tartó kép infót.
 
-	Egy kocsi k�p info besz�r�sa.
+### Request
+```json
+{
+	"carId": 3
+}
+```
+### Response
+```json
+{
+	"file_id": 5,
+	"car_id": 3,
+	"filename": "Király_lada.jpg",		
+	"pathdir": "pics",
+	"pathur": "file:///c://this/is/a/path/to/pics"
+}
+```
 
-delete->images/imageId
+## **PUT** /images/:carId
+Egy carId alapján frissíti az adatokat az adott kocsi kép infon.
 
-	Egy imageId alapj�n t�rli az adott kocsi k�p infot.
+### Request
+```json
+{
+    "message": 1
+}
+```
 
-put->images/imageId
+### Response
+```json
+{
+    "message": "5"
+}
+```
 
-	Egy imageId alapj�n friss�ti az adatokat az adott kocsi k�p infon.
+## **DELETE** /images/:carId
+Egy carId alapján törli az adott kocsi kép infot.
 
+### Response
+```json
+{
+    "message": "Sikeres törlés"
+}
+```
+
+## **GET** /images/filter
+Egy **field** és egy **keyword** paramétert vár.
+* *field*: 
+	* melyik mező alapján akarsz lekérdezni,
+* *keyword*: 
+	* milyen értékkel.
+
+### Request
+```json
+{
+	"filename": "Király_lada.jpg"
+}
+```
+### Response
+```json
+{
+	"file_id": 5,
+	"car_id": 3,
+	"filename": "Király_lada.jpg",		
+	"pathdir": "pics",
+	"pathur": "file:///c://this/is/a/path/to/pics"
+}
+```
 

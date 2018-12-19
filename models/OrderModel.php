@@ -2,15 +2,15 @@
 
 class OrderModel extends Model
 {
-    
+
     public function getOrderById($order_id)
     {
         return $this->db
             ->select([
                 'o.rent_id', 'o.car_id', 'o.start_date', 'o.end_date', 'o.rent_status', 'o.starting_km', 'o.last_km', 'o.accident_details', 'o.daily_rent_price', 'o.fixing_price', 'o.insurance_price', 'o.deposit', 'o.rent_subtotal', 'o.vat', 'o.rent_total', 'o.firstname', 'o.lastname', 'o.user_id', 'o.email', 'o.address', 'o.phone', 'o.birthdate',
             ])
-            ->from( 'rent_orders o' )
-            ->where( 'o.rent_id', '=', $order_id )
+            ->from('rent_orders o')
+            ->where('o.rent_id', '=', $order_id)
             ->execute()
             ->fetch();
     }
@@ -21,8 +21,8 @@ class OrderModel extends Model
             ->select([
                 'o.rent_id', 'o.car_id', 'o.start_date', 'o.end_date', 'o.rent_status', 'o.starting_km', 'o.last_km', 'o.accident_details', 'o.daily_rent_price', 'o.fixing_price', 'o.insurance_price', 'o.deposit', 'o.rent_subtotal', 'o.vat', 'o.rent_total', 'o.firstname', 'o.lastname', 'o.user_id', 'o.email', 'o.address', 'o.phone', 'o.birthdate',
             ])
-            ->from( 'rent_orders o' )
-            ->where( 'o.rent_status', '=', '1' )
+            ->from('rent_orders o')
+            ->where('o.rent_status', '=', '1')
             ->execute()
             ->fetch();
     }
@@ -33,32 +33,32 @@ class OrderModel extends Model
             ->select([
                 'o.rent_id', 'o.car_id', 'o.start_date', 'o.end_date', 'o.rent_status', 'o.starting_km', 'o.last_km', 'o.accident_details', 'o.daily_rent_price', 'o.fixing_price', 'o.insurance_price', 'o.deposit', 'o.rent_subtotal', 'o.vat', 'o.rent_total', 'o.firstname', 'o.lastname', 'o.user_id', 'o.email', 'o.address', 'o.phone', 'o.birthdate',
             ])
-            ->from( 'rent_orders o' )
-            ->where( 'o.rent_status', '=', '0' )
+            ->from('rent_orders o')
+            ->where('o.rent_status', '=', '0')
             ->execute()
             ->fetch();
     }
 
-    public function getOrdersByStartPeriod($startdate,$enddate)
+    public function getOrdersByStartPeriod($startdate, $enddate)
     {
         return $this->db
             ->select([
                 'o.rent_id', 'o.car_id', 'o.start_date', 'o.end_date', 'o.rent_status', 'o.starting_km', 'o.last_km', 'o.accident_details', 'o.daily_rent_price', 'o.fixing_price', 'o.insurance_price', 'o.deposit', 'o.rent_subtotal', 'o.vat', 'o.rent_total', 'o.firstname', 'o.lastname', 'o.user_id', 'o.email', 'o.address', 'o.phone', 'o.birthdate',
             ])
-            ->from( 'rent_orders o' )
-            ->whereBetween('o.start_date', array( $startdate, $enddate))
+            ->from('rent_orders o')
+            ->whereBetween('o.start_date', array($startdate, $enddate))
             ->execute()
             ->fetch();
     }
 
-    public function getOrdersByEndPeriod($startdate,$enddate)
+    public function getOrdersByEndPeriod($startdate, $enddate)
     {
         return $this->db
             ->select([
                 'o.rent_id', 'o.car_id', 'o.start_date', 'o.end_date', 'o.rent_status', 'o.starting_km', 'o.last_km', 'o.accident_details', 'o.daily_rent_price', 'o.fixing_price', 'o.insurance_price', 'o.deposit', 'o.rent_subtotal', 'o.vat', 'o.rent_total', 'o.firstname', 'o.lastname', 'o.user_id', 'o.email', 'o.address', 'o.phone', 'o.birthdate',
             ])
-            ->from( 'rent_orders o' )
-            ->whereBetween('o.end_date', array( $startdate, $enddate))
+            ->from('rent_orders o')
+            ->whereBetween('o.end_date', array($startdate, $enddate))
             ->execute()
             ->fetch();
     }
@@ -67,62 +67,74 @@ class OrderModel extends Model
     {
         return $this->db
             ->select([
-                'o.rent_id', 'o.car_id', 'o.start_date', 'o.end_date', 'o.rent_status', 'o.starting_km', 'o.last_km', 'o.accident_details', 'o.daily_rent_price', 'o.fixing_price', 'o.insurance_price', 'o.deposit', 'o.rent_subtotal', 'o.vat', 'o.rent_total', 'o.firstname', 'o.lastname', 'o.user_id', 'o.email', 'o.address', 'o.phone', 'o.birthdate',
+                'o.rent_id', 'o.car_id', 'o.start_date', 'o.end_date', 'o.rent_status', 'o.starting_km', 'o.last_km', 'o.accident_details', 'o.daily_rent_price', 'o.fixing_price', 'o.insurance_price', 'o.deposit', 'o.rent_subtotal', 'o.vat', 'o.rent_total', 'o.firstname', 'o.lastname', 'o.user_id', 'o.email', 'o.address', 'o.phone', 'o.birthdate', 'c.plate_number'
             ])
-            ->from( 'rent_orders o' )
+            ->from('rent_orders o')
+            ->leftJoin('cars c', 'c.car_id', '=', 'o.car_id')
             ->execute()
             ->fetchAll();
     }
-    
+
     public function insertOrder($datas)
-    {       
+    {
         return $this->db->insert($datas)
-                        ->into('rent_orders')
-                        ->execute();
+            ->into('rent_orders')
+            ->execute();
     }
 
     public function deleteOrder($id)
     {
         return $this->db->delete()
-                        ->from('rent_orders')
-                        ->where('rent_id', '=', $id)
-                        ->execute();
+            ->from('rent_orders')
+            ->where('rent_id', '=', $id)
+            ->execute();
     }
 
     public function updateOrder($id, $datas)
     {
         return $this->db->update($datas)
-                        ->table('rent_orders')
-                        ->where('rent_id', '=', $id)
-                        ->execute();
-    }    
+            ->table('rent_orders')
+            ->where('rent_id', '=', $id)
+            ->execute();
+    }
 
     public function getByFilter($field, $keyword)
     {
         return $this->db->select()
-                        ->from('rent_orders')
-                        ->where($field, 'like', '%'.$keyword.'%')
-                        ->execute()
-                        ->fetchAll();
+            ->from('rent_orders')
+            ->where($field, 'like', '%' . $keyword . '%')
+            ->execute()
+            ->fetchAll();
     }
 
     public function getByMultiFilter($whereParams)
     {
         return $this->db->select()
-                        ->from('rent_orders')
-                        ->whereMany($whereParams, 'LIKE', 'AND')
-                        ->execute()
-                        ->fetchAll();
-					
+            ->from('rent_orders')
+            ->whereMany($whereParams, 'LIKE', 'AND')
+            ->execute()
+            ->fetchAll();
+
     }
 
     public function getOrderByField($field, $keyword)
     {
         return $this->db->select()
-                        ->from('rent_orders')
-                        ->where($field, '=', $keyword)
-                        ->execute()
-                        ->fetch();
+            ->from('rent_orders')
+            ->where($field, '=', $keyword)
+            ->execute()
+            ->fetch();
+    }
+
+    public function isCarFree($carId, $orderId = null)
+    {
+        $stmt = $this->db->select()->from('rent_orders')->where('car_id', '=', $carId)->where('rent_status', '=', 1);
+
+        if ($orderId) {
+            $stmt = $stmt->where('rent_id', '!=', $orderId);
+        }
+
+        return !$stmt->execute()->fetch();
     }
 
 }

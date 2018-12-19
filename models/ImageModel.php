@@ -8,7 +8,7 @@ class ImageModel extends Model
         return $this->db->select()
                         ->from('car_images')
                         ->execute()
-                        ->fetch();
+                        ->fetchAll();
     }
 
     public function getCarImageById($id)
@@ -31,8 +31,8 @@ class ImageModel extends Model
     public function deleteCarImage($id)
     {
         return $this->db->delete()
-                        ->from('car_images c')
-                        ->where('c.car_id', '=', $id)
+                        ->from('car_images')
+                        ->where('car_id', '=', $id)
                         ->execute();
     }
 
@@ -50,7 +50,7 @@ class ImageModel extends Model
                         ->from('car_images')
                         ->where($field, 'like', '%'.$keyword.'%')
                         ->execute()
-                        ->fetch();
+                        ->fetchAll();
         
     }
 }

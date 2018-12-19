@@ -1,4 +1,4 @@
-x0<?php
+<?php
 
 $app-> group('/cars', function (){
 
@@ -22,9 +22,9 @@ $app-> group('/cars', function (){
             }
     
             return $response->withJson($cars_array);
-        }	 
+        }
 
-        return $response->withJson([ 'message' => 'Nincsenek autók!' ], 404);	     
+        return $response->withJson([]);
     });	   
 
     $this->get('/filter', function ($request, $response) {	 
@@ -59,7 +59,11 @@ $app-> group('/cars', function (){
         
         $datas = $request->getParsedBody();
         
-        $response = $this->Car->validCar($id, $datas, true);
+        try {
+            $response = $this->Car->validCar(null, $datas, true);
+        } catch (ValidationException $e) {
+            return $response->withJson(['field' => $e->getField(), 'message' => $e->getMessage()]);
+        }
         $message = $this->carModel->getCarById($response);
         
         return $this->response->withJson(['message' => $message ? $message : $response]);

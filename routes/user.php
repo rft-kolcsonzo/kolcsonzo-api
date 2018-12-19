@@ -1,6 +1,6 @@
 <?php
 
-$app->group('/users', function (){
+$app->group('/users', function () {
     // GET /users
     $this->get('', function ($request, $response) {
 
@@ -20,17 +20,21 @@ $app->group('/users', function (){
         return $response->withJson([ 'message' => 'Nem létezik ilyen felhasználó!' ], 404);
     });
 
-    $this->post('/', function ($request, $response) {
+    $this->post('', function ($request, $response) {
 
         if (!$request->getAttribute('is_admin')) {
             return $response->withJson([ 'message' => 'Nincs joga ehhez a művelethez!' ], 403);
         }
         $datas = $request->getParsedBody();
-        $response = $this->User->insertUser($datas);
+        try {
+            $userId = $this->User->insertUser($datas);
+        } catch (ValidationException $e) {
+            return $response->withJson(['field' => $e->getField(), 'message' => $e->getMessage()], 406);
+        }
 
-        $message = $this->userModel->getUserById($response);
+        $user = $this->userModel->getUserById($response);
         
-        return $this->response->withJson(['message' => $message ? $message : $response]);
+        return $this->response->withJson($user);
     });
 
     $this->delete('/[{userId}]', function ($request, $response, $args) {
@@ -46,9 +50,15 @@ $app->group('/users', function (){
     $this->put('/[{id}]', function ($request, $response, $args) {
         $datas = $request->getParsedBody();
         $id = $args['id'];
-        $response = $this->User->updateUser($id, $datas);
-        $message = $this->userModel->getUserById($response);
-        return $this->response->withJson(['message' => $message ? $message : $response]);
+        try {
+            $response = $this->User->updateUser($id, $datas);
+        } catch (ValidationException $e) {
+            return $response->withJson(['field' => $e->getField(), 'message' => $e->getMessage()], 406);
+        }
+        
+        $user = $this->userModel->getUserById($id);
+
+        return $this->response->withJson($user);
     });
 
 })->add($AuthenticationMiddleware); // Use SessionMiddleware

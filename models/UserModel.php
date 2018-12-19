@@ -4,23 +4,36 @@ class UserModel extends Model
     
     public function getAll()
     {
-        return $this->db->select(array('user_id','email','firstname', 'lastname', 'profile_img','is_admin'))
-                        ->from('users u')
-                        ->where('u.enabled_status', '=', 1)
-                        ->where('u.deleted', '=', 0)
-                        ->execute()
-                        ->fetchAll();
+        $result = $this->db
+            ->select(array('user_id','email','firstname', 'lastname','is_admin'))
+            ->from('users u')
+            ->where('u.enabled_status', '=', 1)
+            ->where('u.deleted', '=', 0)
+            ->execute()
+            ->fetchAll();
+
+        foreach ($result as &$row) {
+            $row['is_admin'] = !!$row['is_admin'];
+        }
+
+        return $result;
     }
 
     public function getUserById($id)
     {
-        return $this->db->select(array('user_id','email','firstname', 'lastname', 'profile_img','is_admin'))
+        $result = $this->db->select(array('user_id','email','firstname', 'lastname','is_admin'))
                         ->from('users u')
                         ->where('u.user_id', '=', $id)
                         ->where('u.enabled_status', '=', 1)
                         ->where('u.deleted', '=', 0)
                         ->execute()
                         ->fetch();
+
+        if ($result) {
+            $result['is_admin'] = !!$result['is_admin'];
+        }
+
+        return $result;
     }
 
     public function getUser($field, $data)

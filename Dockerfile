@@ -7,7 +7,7 @@ LABEL   org.label-schema.vcs-ref=${VCS_REF} \
 
 COPY --chown=application:application . /app
 
-ENV RUNTIME=docker \
+ENV RUNTIME=DOCKER \
     PHP_DATE_TIMEZONE=Europe/Budapest
 
 EXPOSE 80 443

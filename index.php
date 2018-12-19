@@ -4,6 +4,7 @@ require 'vendor/autoload.php';
 require_once 'config.php';
 require_once 'lib/Model.php';
 require_once 'lib/Criteria.php';
+require_once 'exceptions/ValidationException.php';
 
 $app = new \Slim\App([ 'settings' => $config ]);
 $container = $app->getContainer();
@@ -83,18 +84,30 @@ $container['Service'] = function ($container) {
 require_once 'middlewares/session.php';
 require_once 'middlewares/auth.php';
 
-$SessionMiddleware = new SessionMiddleware($container->sessionModel);
-$AuthenticationMiddleware = new AuthenticationMiddleware($container->sessionModel);
 
-require_once 'routes/cars.php';
-require_once 'routes/services.php';
-require_once 'routes/images.php';
-require_once 'routes/user.php';
-require_once 'routes/auth.php';
-require_once 'routes/orders.php';
+
+$app->group($config['basePath'], function () use ($app, $container) {
+    $SessionMiddleware = new SessionMiddleware($container->sessionModel);
+    $AuthenticationMiddleware = new AuthenticationMiddleware($container->sessionModel);
+
+    require_once 'routes/cars.php';
+    require_once 'routes/services.php';
+    require_once 'routes/images.php';
+    require_once 'routes/user.php';
+    require_once 'routes/auth.php';
+    require_once 'routes/orders.php';
+});
 
 // Add middleware function: this function will be called with every request
 $app->add(function ($req, $res, $next) {
+    if ($req->isOptions()) {
+        return $res
+            ->withHeader('Access-Control-Allow-Origin', '*')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, X-Session-Token')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+            ->withStatus(204);
+    }
+
     // Get response object from other middlewares/handler
     $response = $next($req, $res);
 

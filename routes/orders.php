@@ -166,6 +166,18 @@ $app->group('/orders', function () {
             $car = $this->carModel->getCarById($order['car_id']);
             $order = $this->orderModel->getOrderById($id);
             $buffer = generate_pdf($order, $car);
+            $filename = sprintf('berleti_szerzodes_ON%05d.pdf', $order['rent_id']);
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            header('Content-Transfer-Encoding: binary');
+            header('Connection: Keep-Alive');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+
+            echo $buffer;
+            exit;
         } else {
             return $response->withJson(['message' => 'Nem létezik ilyen rendelés!'], 404);
         }

@@ -98,8 +98,7 @@ function generate_pdf($order, $car)
     $pdf->SetXY(17, 248.5);
     $pdf->Cell(58, 6, iconv('UTF-8', 'ISO-8859-2', $order['fixing_price'] . ' HUF'), 0, 0, 'L');
 
-    $filename = sprintf('berleti_szerzodes_ON%05d.pdf', $order['rent_id']);
-    return $pdf->Output('D', $filename);
+    return $pdf->Output('S', $filename);
 }
 ?>
 

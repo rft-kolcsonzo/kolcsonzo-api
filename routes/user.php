@@ -23,7 +23,7 @@ $app->group('/users', function () {
     $this->post('', function ($request, $response) {
         $user = $request->getAttribute('user');
 
-        if ($user['is_admin']) {
+        if (!$user['is_admin']) {
             return $response->withJson(['message' => 'Nincs joga ehhez a művelethez!'], 403);
         }
         $datas = $request->getParsedBody();

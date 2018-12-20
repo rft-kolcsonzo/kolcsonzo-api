@@ -3,7 +3,7 @@
 require_once 'models/UserModel.php';
 
 class User
-{    
+{
     protected $model;
 
     public function __construct($container)
@@ -41,12 +41,12 @@ class User
             throw new ValidationException('email', 'Ez az email cím már foglalt');
         }
 
-        if (isset($datas['is_admin']) && !!$datas['is_admin']) {
-            $datas['is_admin'] = true;
+        if (isset($datas['is_admin'])) {
+            $datas['is_admin'] = filter_var($datas['is_admin'], FILTER_VALIDATE_BOOLEAN);
         } else {
             $datas['is_admin'] = false;
         }
-    
+
         $datas['password'] = sha1($datas['password']);
 
         return $this->model->insertUser($datas);
